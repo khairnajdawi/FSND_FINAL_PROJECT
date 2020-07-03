@@ -1,0 +1,32 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Movies{% endblock %}
+{% block content %}
+<h2>Movies</h2>
+<a href="/movies/add" class="btn btn-default"><i class="fas fa-plus"></i>Add new Movie</a>
+<div class="row box-out">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Movie Name</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for movie in movies %}
+            <tr>
+                <td>{{movie.name}}</td>
+                <td> movie.movie_status</td>
+                <td>
+                    <a href="/movies/{{movie.id}}"><i class='fa fa-info'></i></a>
+                    &nbsp;
+                    <a href="/movies/{{movie.id}}/edit"><i class='fa fa-edit'></i></a>
+                    &nbsp;
+                    <a href="/movies/{{movie.id}}/delete"><i class='fa fa-trash'></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

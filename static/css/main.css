@@ -1,0 +1,20 @@
+.navbar{
+    background: linear-gradient(145deg, #ffffff, #e6e6e6);
+    box-shadow: 11px 11px 37px #808080, -11px -11px 37px #ffffff;
+}
+.box-out{
+    border-radius: 20px;
+    background: linear-gradient(145deg, #ffffff, #e6e6e6);
+    box-shadow:  11px 11px 37px #808080, 
+             -11px -11px 37px #ffffff;
+    padding:30px;
+    margin:30px 0;
+}
+.box-in{
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: inset 11px 11px 37px #808080, 
+                inset -11px -11px 37px #ffffff;
+    padding:30px;
+    margin:30px 0;
+}
