@@ -2,12 +2,14 @@
 {% block title %}Actors{% endblock %}
 {% block content %}
 <h2>Actors</h2>
-<a href="/actors/add" class="btn btn-default"><i class="fas fa-plus"></i>Add new Actor</a>
+<a href="/actors/add" class="btn btn-success"><i class="fas fa-plus"></i>&nbsp;Add new Actor</a>
 <div class="row box-out">
     <table class="table table-hover">
         <thead>
             <tr>
                 <th>Actor Name</th>
+                <th>Gender</th>
+                <th>Age</th>
                 <th>Status</th>
                 <th></th>
             </tr>
@@ -16,13 +18,15 @@
             {%for actor in actors %}
             <tr>
                 <td>{{actor.name}}</td>
+                <th>{{actor.gender}}</th>
+                <th>{{actor.age}}</th>
                 <td> {% if actor.is_available %} Available{%else%} Not Available {%endif %}</td>
                 <td>
                     <a href="/actors/{{actor.id}}"><i class='fa fa-info'></i></a>
                     &nbsp;
-                    <a href="/actors/{{actor.id}}/edit"><i class='fa fa-edit'></i></a>
+                    <a href="/actors/{{actor.id}}/edit"><i class='fa fa-edit text-warning'></i></a>
                     &nbsp;
-                    <a href="/actors/{{actor.id}}/delete"><i class='fa fa-trash'></i></a>
+                    <a href="/actors/{{actor.id}}/delete"><i class='fa fa-trash text-danger'></i></a>
                 </td>
             </tr>
             {% endfor %}
