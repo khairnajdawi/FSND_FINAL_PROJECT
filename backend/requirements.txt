@@ -13,5 +13,9 @@ babel
 python-dateutil==2.6.0
 flask-moment
 flask-wtf
-
-
+python-dotenv
+requests
+authlib
+six
+python-jose
+urllib3

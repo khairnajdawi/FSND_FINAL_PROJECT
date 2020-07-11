@@ -1,0 +1,14 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Actors Info{% endblock %}
+{% block content %}
+<h2>Actors Info</h2>
+<a href="/actors" class="btn btn-outline-dark"><i class="fas fa-arrow-left"></i>&nbsp;Back to Actors List</a>
+<div class="box-out">
+    Name : <h2>{{actor.name}}</h2>
+    <hr>
+        <p><small>Gender : </small>{{actor.gender}}</p>
+        <p><small>Age : </small>{{actor.age}}&nbsp;Yrs</p>
+        <hr>
+        <h4>Actor's Movies : </h4>
+</div>
+{% endblock %}

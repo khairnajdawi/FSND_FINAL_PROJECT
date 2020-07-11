@@ -16,13 +16,13 @@
             {%for movie in movies %}
             <tr>
                 <td>{{movie.name}}</td>
-                <td> movie.movie_status</td>
+                <td>{{movie.movie_status.value}}</td>
                 <td>
                     <a href="/movies/{{movie.id}}"><i class='fa fa-info'></i></a>
                     &nbsp;
-                    <a href="/movies/{{movie.id}}/edit"><i class='fa fa-edit'></i></a>
+                    <a href="/movies/{{movie.id}}/edit"><i class='fa text-warning fa-edit'></i></a>
                     &nbsp;
-                    <a href="/movies/{{movie.id}}/delete"><i class='fa fa-trash'></i></a>
+                    <a href="/movies/{{movie.id}}/delete"><i class='fa text-danger fa-trash'></i></a>
                 </td>
             </tr>
             {% endfor %}

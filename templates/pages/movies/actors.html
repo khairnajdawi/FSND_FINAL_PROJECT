@@ -1,0 +1,43 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Movie's Actors{% endblock %}
+{% block content %}
+<style>
+  p{
+    font-size:x-large;
+  }
+</style>
+<a href="/movies" class="btn btn-outline-dark"><i class="fas fa-arrow-left"></i>&nbsp;back to Movies List</a>
+<div class="box-out">
+    <p><small>Name : </small>{{movie.name}}</p>
+    <hr>
+    <form action="" method="POST" class="form col-md-8 col-lg-6 justify-content-center">
+      <h3 class="form-heading">Add Actor to Movie</h3>
+      <div class="form-group">
+        <label for="Actor">Select Actor to add</label>
+        {{ form.Actor(class_ = 'form-control', autofocus = true) }}
+      </div>
+      <input type="submit" name="addactor" value="Add Actor" class="btn btn-primary btn-lg btn-block">
+    </form>
+    <hr>
+  <h3>Actors List : </h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Actor's Name</th>
+      </tr>
+    </thead>
+    <tbody>          
+      {%for actor in movie.actors%}
+        <tr>
+          <td>*{{actor.name}}
+          <form action="" method="POST" class="form">
+            <input type="hidden" name="actor_id" value="{{actor.id}}">
+            <input type="submit" name="deleteactor" value="X" class="btn btn-danger">
+          </form>
+        </td>
+        </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

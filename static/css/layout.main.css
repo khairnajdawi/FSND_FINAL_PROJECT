@@ -30,8 +30,3 @@ body {
 .my-button{
   min-width:100px;
 }
-
-.navbar{
-  position: fixed;
-  width:100%;
-}

@@ -22,7 +22,6 @@ def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
-    # db.create_all()
 
 
 '''
@@ -37,16 +36,27 @@ class Actors(db.Model):
     __tablename__ = 'Actors'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(String,nullable=False)
-    is_available = db.Column(db.Boolean,nullable=False,default=True,server_default='True')
-    age = db.Column(db.Integer,nullable=False)
-    gender =db.Column(db.String,nullable=False)
+    name = db.Column(String, nullable=False)
+    is_available = db.Column(db.Boolean, nullable=False, default=True, server_default='True')
+    age = db.Column(db.Integer, nullable=False)
+    gender =db.Column(db.String, nullable=False)
 
     def __init__(self, name, age, gender, is_available=True):
         self.name = name
         self.is_available = is_available
         self.age = age
         self.gender = gender
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
 
     def format(self):
         return {
@@ -118,6 +128,31 @@ class Movies(db.Model):
     movie_rating = db.Column(db.Enum(MoviesRating),nullable=False)
     actors = db.relationship('Actors',secondary="MovieActors",backref=db.backref('movies',lazy=True))
 
+    def __init__(self, name, movie_status, movie_category, movie_rating):
+        self.name = name
+        self.movie_status = movie_status
+        self.movie_category = movie_category
+        self.movie_rating = movie_rating
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def format(self):
+        return {
+          'id': self.id,
+          'name': self.name,
+          'movie_status': self.movie_status.value,
+          'movie_category': self.movie_category.value,
+          'movie_rating': self.movie_rating.value
+          }
 
 '''
 Movie Actor Relation

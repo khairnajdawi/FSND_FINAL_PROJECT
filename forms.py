@@ -28,3 +28,34 @@ class AddActorForm(FlaskForm):
         validators=[DataRequired()],
         choices=[('Male','Male'),('Female','Female')]
     )
+
+class MovieForm(FlaskForm):
+    name = StringField(
+        'name',
+        validators=[DataRequired()]
+    )
+    movie_status = SelectField(
+        'movie_status',
+        validators=[DataRequired()]
+    )
+    movie_rating = SelectField(
+        'movie_rating',
+        validators=[DataRequired()]
+    )
+    movie_category = SelectField(
+        'movie_category',
+        validators=[DataRequired()]
+    )
+        
+    def __init__(self, *args, **kwargs): 
+        super(MovieForm, self).__init__(*args, **kwargs)
+        self.movie_status.choices = [(name, member.value) for name,member in MovieStatus.__members__.items()]
+        self.movie_rating.choices = [(name, member.value) for name,member in MoviesRating.__members__.items()]
+        self.movie_category.choices = [(name, member.value) for name,member in MoviesCategory.__members__.items()]
+
+
+class MovieActorsForm(FlaskForm):
+    Actor = SelectField(
+        'Actor',
+        validators=[DataRequired()]
+    )
