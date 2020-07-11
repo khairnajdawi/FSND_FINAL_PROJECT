@@ -100,14 +100,13 @@ python manage.py db upgrade
          `create:actor`, `edit:actor`, `delete:actor`,
          `edit:movie`, `add:movie-actor`, `delete:movie-actor`
     - Executive Producer
-        - can perform all actions
+        - can perform all actions        
 
 ## Testing
-Use test_setup.sh in backend folder to setup test environment,
-it will create a test db and all tables required,
-and will add some records to db to use in testing,
-you need to edit the file and change the DATABASE_URL to meet your host
+
+Use test_setup.sh in backend folder to setup test environment, it will create a test db and all tables required, and will add some records to db to use in testing, you need to edit the file and change the DATABASE_URL to meet your host.
 Test your endpoints with [Postman](https://getpostman.com):
+- Test steps
     - Register 3 users - assign the Casting Assistant role to one, Casting Director role to another, and Executive Producer to a third.
     - Sign into each account and make note of the JWT.
     - Import the postman collection `./backend/udacity-fsnd-final-project.postman_collection.json`
