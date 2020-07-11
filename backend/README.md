@@ -38,7 +38,7 @@ Each time you open a new terminal session, run:
 ```bash
 source ./setup.py;
 ```
-so you get the environment variable needed
+so you get the environment variables needed
 
 ```bash
 export FLASK_APP=flaskr;
@@ -56,11 +56,15 @@ The `--reload` flag will detect file changes and restart the server automaticall
 
 ### configure DB
 edit the model class './backend/setup.sh' 
+
 and change the DATABASE_URL value to meet your host
+
 then use Migration to create your db
-$ python manage.py db init
-$ python manage.py db migrate
-$ python manage.py db upgrade
+```bash
+python manage.py db init
+python manage.py db migrate
+python manage.py db upgrade
+```
 
 ### Setup Auth0
 
@@ -103,7 +107,7 @@ Use test_setup.sh in backend folder to setup test environment,
 it will create a test db and all tables required,
 and will add some records to db to use in testing,
 you need to edit the file and change the DATABASE_URL to meet your host
-Test your endpoints with [Postman](https://getpostman.com). 
+Test your endpoints with [Postman](https://getpostman.com):
     - Register 3 users - assign the Casting Assistant role to one, Casting Director role to another, and Executive Producer to a third.
     - Sign into each account and make note of the JWT.
     - Import the postman collection `./backend/udacity-fsnd-final-project.postman_collection.json`
