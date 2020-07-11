@@ -1,4 +1,4 @@
-# Coffee Shop Backend
+# Casting Agency Backend
 
 ## Getting Started
 
@@ -35,6 +35,10 @@ This will install all of the required packages we selected within the `requireme
 From within the `./src` directory first ensure you are working using your created virtual environment.
 
 Each time you open a new terminal session, run:
+```bash
+source ./setup.py;
+```
+so you get the environment variable needed
 
 ```bash
 export FLASK_APP=flaskr;
