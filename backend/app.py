@@ -8,7 +8,7 @@ from backend.models import db,setup_db,Actors,Movies
 import logging
 from flask import session
 
-from auth.auth import AuthError, requires_auth
+from backend.auth.auth import AuthError, requires_auth
 
 def create_app():
 
