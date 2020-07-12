@@ -17,4 +17,4 @@ python-dotenv
 authlib
 six
 python-jose
-urllib
+urllib3==1.25.9
