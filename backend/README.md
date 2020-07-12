@@ -120,61 +120,91 @@ Test your endpoints with [Postman](https://getpostman.com):
     - Request Arguments: None
     - Returns: A boolean success, and a list of actors
     - Request example : curl http://localhost:5000/actors
-    - Response sample : 
-        {
-        "actors": [
-            {
-            "age": 62,
-            "gender": "Male",
-            "id": 1,
-            "name": "Will Smith"
-            },
-            {
-            "age": 56,
-            "gender": "Male",
-            "id": 2,
-            "name": "Leonardo DiCaprio"
-            },
-            {
-            "age": 35,
-            "gender": "Female",
-            "id": 3,
-            "name": "Scarlett Johansson"
-            }
-        ],
-        "success": true
-        }
+    - Response sample :  \
+        { \
+        "actors": [ \
+            { \
+            "age": 62, \
+            "gender": "Male", \
+            "id": 1, \
+            "name": "Will Smith" \
+            }, \
+            { \
+            "age": 56, \
+            "gender": "Male", \
+            "id": 2, \
+            "name": "Leonardo DiCaprio" \
+            }, \
+            { \
+            "age": 35, \
+            "gender": "Female", \
+            "id": 3, \
+            "name": "Scarlett Johansson" \
+            } \
+        ], \
+        "success": true \
+        } \
 
 - POST '/actors'
     - creates a new actor
     - Request Argument : A json object contains actor's attribute : name, age, and gender
     - Returens : A boolean success, and the new actor's Id
-    - Request example : 
+    - Request example :  \
         curl --location --request POST 'http://localhost:5000/actors' \
         --header 'Content-Type: application/json' \
-        --data-raw '{
-            "name":"Will Smith",
-            "age":"55",
-            "gender":"Male"
-        }'
-    - Response sample : 
-        {
-            "inserted": 4,
-            "success": true
-        }
+        --data-raw '{ \
+            "name":"Will Smith", \
+            "age":"55", \
+            "gender":"Male" \
+        }' \
+    - Response sample :  \
+        { \
+            "inserted": 4, \
+            "success": true \
+        } \
 
 - GET '/actors/<int : actor_id>'
     - Gets actor's info
     - Request arguments : None
     - Returns : A boolean success, and a json object of actor's info
     - Request example : curl --location --request GET 'http://localhost:5000/actors/1'
-    - Response Sample : 
-        {
-            "info": {
-                "age": 62,
-                "gender": "Male",
-                "id": 1,
-                "name": "Will Smith"
-            },
-            "success": true
-        }
+    - Response Sample :  \
+        { \
+            "info": { \
+                "age": 62, \
+                "gender": "Male", \
+                "id": 1, \
+                "name": "Will Smith" \
+            }, \
+            "success": true \
+        } \
+
+- DELETE '/actors/<int : actor_id>'
+    - deletes an actor identified by the actor_id
+    - Request Arguments : None
+    - Returns : A boolean success, and the id of the actor just deleted
+    - Request example : curl --location --request DELETE 'http://localhost:5000/actors/4'
+    - Response Sample : \
+        { \
+            "deleted": 4, \
+            "success": true \
+        } \
+
+- PATCH '/actors/<int : actor_id>'
+    - updates an actor's info whose id is actor_id
+    - Request Arguments : one or more attribute of the actor : age, gender, or name
+    - Returns : A boolean success, and the id of the actor just updated
+    - Request example :  \
+        curl --location --request PATCH 'http://localhost:5000/actors/1' \
+        --header 'Content-Type: application/json' \
+        --data-raw '{ \
+            "name":"Will Smith", \
+            "age":"62", \
+            "gender":"Male" \
+        }' \
+    - Response Sample : \
+        { \
+            "success": true, \
+            "updated": 1 \
+        } \
+        

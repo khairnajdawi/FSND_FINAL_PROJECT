@@ -110,7 +110,7 @@ def create_app():
 
 
     @app.route('/actors/<int:actor_id>',methods=['GET'])
-    #@requires_auth('get:actor-info')
+    @requires_auth('get:actor-info')
     def get_actor_info(actor_id):
         actor = Actors.query.get(actor_id)
         if(not actor):
