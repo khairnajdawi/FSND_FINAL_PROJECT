@@ -1,1 +1,1 @@
-web: gunicorn backend.flaskr:app
+web: gunicorn --pythonpath app backend.flaskr
