@@ -434,3 +434,10 @@ Test your endpoints with [Postman](https://getpostman.com):
             "success": true
         } 
         ```
+
+## Deploying to Heroku :
+
+- DB Migration : 
+```
+heroku run python ./backend/manage.py db upgrade --directory ./backend/migrations
+```

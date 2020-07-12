@@ -1,0 +1,5 @@
+https://kj-casting-agency.us.auth0.com/authorize?
+    response_type=token&
+    client_id=nm6XTUr2X9Nyefwrql8h8Tcw7inGGkgX&
+    redirect_uri=https://localhost/login-result&
+    audience=https://kj-casting-system.herukoapp.com

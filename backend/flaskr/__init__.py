@@ -35,7 +35,7 @@ def create_app():
 
     @app.route('/actors')
     @requires_auth('get:actors')
-    def actors():
+    def actors(payload):
         actors_list = Actors.query.all()
         actors_formatted = [actor.format() for actor in actors_list]
         return jsonify({
@@ -56,7 +56,7 @@ def create_app():
 
     @app.route('/actors',methods=['POST'])
     @requires_auth('create:actor')
-    def add_actor():
+    def add_actor(payload):
         #read form data from post request
         body = request.get_json()
         if(not body):
@@ -111,7 +111,7 @@ def create_app():
 
     @app.route('/actors/<int:actor_id>',methods=['GET'])
     @requires_auth('get:actor-info')
-    def get_actor_info(actor_id):
+    def get_actor_info(payload,actor_id):
         actor = Actors.query.get(actor_id)
         if(not actor):
             abort(404)
@@ -135,7 +135,7 @@ def create_app():
 
     @app.route('/actors/<int:actor_id>',methods=['DELETE'])
     @requires_auth('delete:actor')
-    def delete_actor(actor_id):
+    def delete_actor(payload,actor_id):
         actor = Actors.query.get(actor_id)
         deleted=False
         if(actor):
@@ -169,7 +169,7 @@ def create_app():
 
     @app.route('/actors/<int:actor_id>',methods=['PATCH'])
     @requires_auth('edit:actor')
-    def update_actor(actor_id):
+    def update_actor(payload,actor_id):
         actor_to_update = Actors.query.get(actor_id)
         if(not actor_to_update):
             abort(404)            
@@ -220,7 +220,7 @@ def create_app():
 
     @app.route('/actors/<actor_id>/movies')
     @requires_auth('get:actor-movies')
-    def get_actor_movies(actor_id):
+    def get_actor_movies(payload,actor_id):
         actor = Actors.query.get(actor_id)
         movies = [movie.format() for movie in actor.movies]
         return jsonify({
@@ -241,7 +241,7 @@ def create_app():
 
     @app.route('/movies')
     @requires_auth('get:movies')
-    def get_movies():
+    def get_movies(payload):
         movies = Movies.query.all()
         movies_formatted = [movie.format() for movie in movies]  
         return jsonify({
@@ -262,7 +262,7 @@ def create_app():
 
     @app.route('/movies/<int:movie_id>')
     @requires_auth('get:movie-info')
-    def get_movie_info(movie_id):
+    def get_movie_info(payload,movie_id):
         movie = Movies.query.get(movie_id)
         if(not movie):
             abort(404)
@@ -284,7 +284,7 @@ def create_app():
 
     @app.route('/movies',methods=['POST'])
     @requires_auth('create:movie')
-    def create_movie():
+    def create_movie(payload):
         body = request.get_json()
         if(not body):
             abort(400)
@@ -330,7 +330,7 @@ def create_app():
 
     @app.route('/movies/<int:movie_id>',methods=['PATCH'])
     @requires_auth('edit:movie')
-    def update_movie(movie_id):
+    def update_movie(payload,movie_id):
         movie_to_update = Movies.query.get(movie_id)
         if(not movie_to_update):
             abort(404)
@@ -376,7 +376,7 @@ def create_app():
 
     @app.route('/movies/<int:movie_id>/actors')
     @requires_auth('get:movie-actors')
-    def get_movie_actors(movie_id):
+    def get_movie_actors(payload,movie_id):
         movie = Movies.query.get(movie_id)        
         if(not movie):
             abort(404)
@@ -399,7 +399,7 @@ def create_app():
 
     @app.route('/movies/<int:movie_id>/actors',methods=['POST'])
     @requires_auth('add:movie-actor')
-    def add_movie_actors(movie_id):
+    def add_movie_actors(payload,movie_id):
         movie = Movies.query.get(movie_id)        
         if(not movie):
             abort(404)
@@ -438,7 +438,7 @@ def create_app():
 
     @app.route('/movies/<int:movie_id>/actors',methods=['DELETE'])
     @requires_auth('delete:movie-actor')
-    def delete_movie_actors(movie_id):
+    def delete_movie_actors(payload,movie_id):
         movie = Movies.query.get(movie_id)        
         if(not movie):
             abort(404)
@@ -477,7 +477,7 @@ def create_app():
 
     @app.route('/movies/<int:movie_id>', methods=['DELETE'])
     @requires_auth('delete:movie')
-    def delete_movie(movie_id):
+    def delete_movie(payload,movie_id):
         movie_to_delete = Movies.query.get(movie_id)
         if(not movie_to_delete):
             abort(422)
