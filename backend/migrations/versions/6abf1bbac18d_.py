@@ -29,7 +29,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(), nullable=False),
     sa.Column('release_date', sa.DateTime(), nullable=False),
-    sa.Column('movie_category', sa.Enum('Action', 'Adveture', 'Animation', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Family', 'History', 'Horror', 'Musical', 'Romance', 'SciFi', name='moviescategory'), nullable=False),
+    sa.Column('movie_category', sa.Enum('Action', 'Adventure', 'Animation', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Family', 'History', 'Horror', 'Musical', 'Romance', 'SciFi', name='moviescategory'), nullable=False),
     sa.Column('movie_rating', sa.Enum('G', 'PG', 'PG13', 'R', name='moviesrating'), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
