@@ -1,7 +1,7 @@
 import os
 from flask import Flask,render_template, request, Response, flash, redirect, url_for,jsonify,abort
 from flask_cors import CORS
-from models import db,setup_db,Actors,Movies
+from backend.models import db,setup_db,Actors,Movies
 # from flask_moment import Moment
 # from flask_wtf import FlaskForm
 # from forms import *
