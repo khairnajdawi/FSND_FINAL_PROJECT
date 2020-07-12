@@ -185,26 +185,26 @@ Test your endpoints with [Postman](https://getpostman.com):
     - Returns : A boolean success, and the id of the actor just deleted
     - Request example : curl --location --request DELETE 'http://localhost:5000/actors/4'
     - Response Sample : \
-        { \
-            "deleted": 4, \
-            "success": true \
-        } \
+        &nbsp;&nbsp;&nbsp;&nbsp;{ \
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"deleted": 4, \
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"success": true \
+        &nbsp;&nbsp;&nbsp;&nbsp;} \
 
 - PATCH '/actors/<int : actor_id>'
     - updates an actor's info whose id is actor_id
     - Request Arguments : one or more attribute of the actor : age, gender, or name
     - Returns : A boolean success, and the id of the actor just updated
     - Request example :  \
-        curl --location --request PATCH 'http://localhost:5000/actors/1' \
-        --header 'Content-Type: application/json' \
-        --data-raw '{ \
-            "name":"Will Smith", \
-            "age":"62", \
-            "gender":"Male" \
-        }' \
+        &nbsp;&nbsp;&nbsp;&nbsp;curl --location --request PATCH 'http://localhost:5000/actors/1' \
+        &nbsp;&nbsp;&nbsp;&nbsp;--header 'Content-Type: application/json' \
+        &nbsp;&nbsp;&nbsp;&nbsp;--data-raw '{ \
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":"Will Smith", \
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"age":"62", \
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"gender":"Male" \
+        &nbsp;&nbsp;&nbsp;&nbsp;}' \
     - Response Sample : \
-        { \
-            "success": true, \
-            "updated": 1 \
-        } \
+        &nbsp;&nbsp;&nbsp;&nbsp;{ \
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"success": true, \
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"updated": 1 \
+        &nbsp;&nbsp;&nbsp;&nbsp;} \
         
