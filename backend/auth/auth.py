@@ -2,7 +2,7 @@ import json
 from flask import request, _request_ctx_stack
 from functools import wraps
 from jose import jwt
-from urllib import urlopen
+from urllib.request import urlopen
 
 
 AUTH0_DOMAIN = 'kj-casting-agency.us.auth0.com'
