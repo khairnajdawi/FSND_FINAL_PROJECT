@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: fa58db3973b5
+Revision ID: 6abf1bbac18d
 Revises: 
-Create Date: 2020-07-03 22:32:49.960130
+Create Date: 2020-07-12 17:55:09.499449
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'fa58db3973b5'
+revision = '6abf1bbac18d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,15 +21,14 @@ def upgrade():
     op.create_table('Actors',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
-    sa.Column('is_available', sa.Boolean(), server_default='True', nullable=False),
     sa.Column('age', sa.Integer(), nullable=False),
     sa.Column('gender', sa.String(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('Movies',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(), nullable=False),
-    sa.Column('movie_status', sa.Enum('Directing', 'Filming', 'Published', 'ReadyToPublish', 'Recruting', 'Review', name='moviestatus'), nullable=False),
+    sa.Column('title', sa.String(), nullable=False),
+    sa.Column('release_date', sa.DateTime(), nullable=False),
     sa.Column('movie_category', sa.Enum('Action', 'Adveture', 'Animation', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Family', 'History', 'Horror', 'Musical', 'Romance', 'SciFi', name='moviescategory'), nullable=False),
     sa.Column('movie_rating', sa.Enum('G', 'PG', 'PG13', 'R', name='moviesrating'), nullable=False),
     sa.PrimaryKeyConstraint('id')

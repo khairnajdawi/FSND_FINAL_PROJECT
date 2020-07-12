@@ -65,18 +65,16 @@ def create_app():
         name = body.get('name',None)
         age = body.get('age',None)
         gender = body.get('gender',None)
-        is_available = body.get('is_available',None)
         #check if all required data is available,
         #if so, then add the actor
         added=False
         new_actor_id=0
-        if(name and age and gender and is_available):
+        if(name and age and gender):
         #create Actor instance using form data
             new_actor = Actors(
                 name=name,
                 age=age,
-                gender=gender,
-                is_available=is_available=="True")
+                gender=gender)
             #add new actor to db
             added=False
             try:
@@ -112,7 +110,7 @@ def create_app():
 
 
     @app.route('/actors/<int:actor_id>',methods=['GET'])
-    @requires_auth('get:actor-info')
+    #@requires_auth('get:actor-info')
     def get_actor_info(actor_id):
         actor = Actors.query.get(actor_id)
         if(not actor):
@@ -136,7 +134,7 @@ def create_app():
 
 
     @app.route('/actors/<int:actor_id>',methods=['DELETE'])
-    @requires_auth('delete:actor')
+    #@requires_auth('delete:actor')
     def delete_actor(actor_id):
         actor = Actors.query.get(actor_id)
         deleted=False
@@ -170,7 +168,7 @@ def create_app():
 
 
     @app.route('/actors/<int:actor_id>',methods=['PATCH'])
-    @requires_auth('edit:actor')
+    #@requires_auth('edit:actor')
     def update_actor(actor_id):
         actor_to_update = Actors.query.get(actor_id)
         if(not actor_to_update):
@@ -183,7 +181,6 @@ def create_app():
         name = body.get('name',None)
         age = body.get('age',None)
         gender = body.get('gender',None)
-        is_available = body.get('is_available',None)
         #check if all required data is available,
         #if so, then add the actor
         updated=False
@@ -193,8 +190,6 @@ def create_app():
             actor_to_update.age = age
         if(gender):
             actor_to_update.gender = gender
-        if(is_available):
-            actor_to_update.is_available = is_available=="True"
         try:
             actor_to_update.update()
             updated=True
@@ -224,7 +219,7 @@ def create_app():
 
 
     @app.route('/actors/<actor_id>/movies')
-    @requires_auth('get:actor-movies')
+    #@requires_auth('get:actor-movies')
     def get_actor_movies(actor_id):
         actor = Actors.query.get(actor_id)
         movies = [movie.format() for movie in actor.movies]
@@ -245,7 +240,7 @@ def create_app():
 
 
     @app.route('/movies')
-    @requires_auth('get:movies')
+    #@requires_auth('get:movies')
     def get_movies():
         movies = Movies.query.all()
         movies_formatted = [movie.format() for movie in movies]  
@@ -266,7 +261,7 @@ def create_app():
 
 
     @app.route('/movies/<int:movie_id>')
-    @requires_auth('get:movie-info')
+    #@requires_auth('get:movie-info')
     def get_movie_info(movie_id):
         movie = Movies.query.get(movie_id)
         if(not movie):
@@ -288,24 +283,24 @@ def create_app():
 
 
     @app.route('/movies',methods=['POST'])
-    @requires_auth('create:movie')
+    #@requires_auth('create:movie')
     def create_movie():
         body = request.get_json()
         if(not body):
             abort(400)
-        name = body.get('name',None)
-        movie_status = body.get('movie_status',None)
+        title = body.get('title',None)
+        release_date = body.get('release_date',None)
         movie_category = body.get('movie_category',None)
         movie_rating = body.get('movie_rating',None)
         created=False
         new_movie_id=0
-        if(name and movie_status and movie_category and movie_rating):
+        if(title and release_date and movie_category and movie_rating):
             try:
                 new_movie = Movies(
-                    name=name,
+                    title = title,
+                    release_date = release_date,
                     movie_rating = movie_rating,
-                    movie_category = movie_category,
-                    movie_status = movie_status
+                    movie_category = movie_category
                 )
                 new_movie.insert()
                 created=True
@@ -334,6 +329,7 @@ def create_app():
 
 
     @app.route('/movies/<int:movie_id>',methods=['PATCH'])
+    #@requires_auth('edit:movie')
     def update_movie(movie_id):
         movie_to_update = Movies.query.get(movie_id)
         if(not movie_to_update):
@@ -341,15 +337,15 @@ def create_app():
         body = request.get_json()
         if(not body):
             abort(400)
-        name = body.get('name',None)
-        movie_status = body.get('movie_status',None)
+        title = body.get('title',None)
+        release_date = body.get('release_date',None)
         movie_category = body.get('movie_category',None)
         movie_rating = body.get('movie_rating',None)
         updated=False
-        if(name):
-            movie_to_update.name = name
-        if(movie_status):
-            movie_to_update.movie_status = movie_status
+        if(title):
+            movie_to_update.title = title
+        if(release_date):
+            movie_to_update.release_date = release_date
         if(movie_category):
             movie_to_update.movie_category = movie_category
         if(movie_rating):
@@ -379,6 +375,7 @@ def create_app():
 
 
     @app.route('/movies/<int:movie_id>/actors')
+    #@requires_auth('get:movie-actors')
     def get_movie_actors(movie_id):
         movie = Movies.query.get(movie_id)        
         if(not movie):
@@ -401,6 +398,7 @@ def create_app():
 
 
     @app.route('/movies/<int:movie_id>/actors',methods=['POST'])
+    #@requires_auth('add:movie-actor')
     def add_movie_actors(movie_id):
         movie = Movies.query.get(movie_id)        
         if(not movie):
@@ -439,6 +437,7 @@ def create_app():
 
 
     @app.route('/movies/<int:movie_id>/actors',methods=['DELETE'])
+    #@requires_auth('delete:movie-actor')
     def delete_movie_actors(movie_id):
         movie = Movies.query.get(movie_id)        
         if(not movie):
@@ -477,6 +476,7 @@ def create_app():
 
 
     @app.route('/movies/<int:movie_id>', methods=['DELETE'])
+    #@requires_auth('delete:movie')
     def delete_movie(movie_id):
         movie_to_delete = Movies.query.get(movie_id)
         if(not movie_to_delete):

@@ -114,4 +114,67 @@ Test your endpoints with [Postman](https://getpostman.com):
     - Run the collection and correct any errors.
     - Export the collection overwriting the one we've included so that we have your proper JWTs during review!
 
+## Endpoints
+- GET '/actors'
+    - gets a list of all actors
+    - Request Arguments: None
+    - Returns: A boolean success, and a list of actors
+    - Request example : curl http://localhost:5000/actors
+    - Response sample : 
+        {
+        "actors": [
+            {
+            "age": 62,
+            "gender": "Male",
+            "id": 1,
+            "name": "Will Smith"
+            },
+            {
+            "age": 56,
+            "gender": "Male",
+            "id": 2,
+            "name": "Leonardo DiCaprio"
+            },
+            {
+            "age": 35,
+            "gender": "Female",
+            "id": 3,
+            "name": "Scarlett Johansson"
+            }
+        ],
+        "success": true
+        }
 
+- POST '/actors'
+    - creates a new actor
+    - Request Argument : A json object contains actor's attribute : name, age, and gender
+    - Returens : A boolean success, and the new actor's Id
+    - Request example : 
+        curl --location --request POST 'http://localhost:5000/actors' \
+        --header 'Content-Type: application/json' \
+        --data-raw '{
+            "name":"Will Smith",
+            "age":"55",
+            "gender":"Male"
+        }'
+    - Response sample : 
+        {
+            "inserted": 4,
+            "success": true
+        }
+
+- GET '/actors/<int : actor_id>'
+    - Gets actor's info
+    - Request arguments : None
+    - Returns : A boolean success, and a json object of actor's info
+    - Request example : curl --location --request GET 'http://localhost:5000/actors/1'
+    - Response Sample : 
+        {
+            "info": {
+                "age": 62,
+                "gender": "Male",
+                "id": 1,
+                "name": "Will Smith"
+            },
+            "success": true
+        }

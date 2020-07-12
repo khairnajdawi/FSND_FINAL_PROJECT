@@ -14,14 +14,14 @@ The project is about a Casting Agency, which models a company that is responsibl
 
 ## Project Parts
 
-Project is divided into two parts, backend and frontend. Start by reading the READMEs in:
+Project is divided into two parts, backend and frontend:
 
-1. [`./backend/`](./backend/README.md)
-2. [`./frontend/`](./frontend/README.md)
+1. [`./backend/`](./backend/)
+2. [`./frontend/`](./frontend/)
 
 ## About the Stack
 
-To start the full stack application, just follow the instruction in both frontend and backend, starting at backend.
+To start the full stack application, just follow the instructions in both frontend and backend, starting at backend.
 
 ### Backend
 

@@ -37,13 +37,11 @@ class Actors(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(String, nullable=False)
-    is_available = db.Column(db.Boolean, nullable=False, default=True, server_default='True')
     age = db.Column(db.Integer, nullable=False)
     gender =db.Column(db.String, nullable=False)
 
-    def __init__(self, name, age, gender, is_available=True):
+    def __init__(self, name, age, gender):
         self.name = name
-        self.is_available = is_available
         self.age = age
         self.gender = gender
 
@@ -62,7 +60,6 @@ class Actors(db.Model):
         return {
           'id': self.id,
           'name': self.name,
-          'is_available': self.is_available,
           'age': self.age,
           'gender': self.gender
           }
@@ -84,7 +81,7 @@ class MoviesCategory(enum.Enum):
     SciFi = 'SciFi'
     Horror = 'Horror'
     Family = 'Family'
-    Adveture = 'Adventure'
+    Adventure = 'Adventure'
     Musical = 'Musical'
     Documentary = 'Documentary'
 
@@ -101,19 +98,6 @@ class MoviesRating(enum.Enum):
 
 
 '''
-Movie Casting Status
-'''
-
-class MovieStatus(enum.Enum):
-    Recruting = 'Recruting'
-    Filming = 'Filming'
-    Directing = 'Directing'
-    Review = 'Review'
-    ReadyToPublish = 'Ready To Publish'
-    Published = 'Published'
-
-
-'''
 Movie Class
 '''
 
@@ -122,15 +106,15 @@ class Movies(db.Model):
     __tablename__ = 'Movies'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(String,nullable=False)
-    movie_status = db.Column(db.Enum(MovieStatus),nullable=False)
+    title = db.Column(String,nullable=False)
+    release_date = db.Column(db.DateTime,nullable=False)
     movie_category = db.Column(db.Enum(MoviesCategory),nullable=False)
     movie_rating = db.Column(db.Enum(MoviesRating),nullable=False)
     actors = db.relationship('Actors',secondary="MovieActors",backref=db.backref('movies',lazy=True))
 
-    def __init__(self, name, movie_status, movie_category, movie_rating):
-        self.name = name
-        self.movie_status = movie_status
+    def __init__(self, title,release_date, movie_category, movie_rating):
+        self.title = title
+        self.release_date = release_date
         self.movie_category = movie_category
         self.movie_rating = movie_rating
 
@@ -148,8 +132,8 @@ class Movies(db.Model):
     def format(self):
         return {
           'id': self.id,
-          'name': self.name,
-          'movie_status': self.movie_status.value,
+          'title': self.title,
+          'release_date' : self.release_date,
           'movie_category': self.movie_category.value,
           'movie_rating': self.movie_rating.value
           }
