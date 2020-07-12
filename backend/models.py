@@ -107,7 +107,7 @@ class Movies(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(String,nullable=False)
-    release_date = db.Column(db.DateTime,nullable=False)
+    release_date = db.Column(db.Date,nullable=False)
     movie_category = db.Column(db.Enum(MoviesCategory),nullable=False)
     movie_rating = db.Column(db.Enum(MoviesRating),nullable=False)
     actors = db.relationship('Actors',secondary="MovieActors",backref=db.backref('movies',lazy=True))

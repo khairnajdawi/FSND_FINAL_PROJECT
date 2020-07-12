@@ -169,7 +169,7 @@ Test your endpoints with [Postman](https://getpostman.com):
         } 
         ```
 
-- GET '/actors/&lt;int : actor_id&lg;'
+- GET '/actors/&lt;int : actor_id&gt;'
     - Gets actor's info
     - Request arguments : None
     - Returns : A boolean success, and a json object of actor's info
@@ -188,7 +188,7 @@ Test your endpoints with [Postman](https://getpostman.com):
         } 
         ```
 
-- DELETE '/actors/&lt;int : actor_id&lg;'
+- DELETE '/actors/&lt;int : actor_id&gt;'
     - deletes an actor identified by the actor_id
     - Request Arguments : None
     - Returns : A boolean success, and the id of the actor just deleted
@@ -202,7 +202,7 @@ Test your endpoints with [Postman](https://getpostman.com):
         } 
         ```
 
-- PATCH '/actors/&lt;int : actor_id&lg;'
+- PATCH '/actors/&lt;int : actor_id&gt;'
     - updates an actor's info whose id is actor_id
     - Request Arguments : one or more attribute of the actor : age, gender, or name
     - Returns : A boolean success, and the id of the actor just updated
@@ -223,4 +223,214 @@ Test your endpoints with [Postman](https://getpostman.com):
                 "updated": 1
         } 
         ```
-        
+
+- GET '/actors/&lt;actor_id&gt;/movies'
+    - get a list of an actor's movies
+    - Request Arguments : None
+    - Returns : A boolean success, and the list of movies
+    - Request example : 
+        ```
+        curl --location --request GET 'http://localhost:5000/actors/1/movies''
+        ```
+    - Response Sample :
+        ```json
+        {
+            "movies": [
+                {
+                "id": 1,
+                "movie_category": "Action",
+                "movie_rating": "PG-13",
+                "release_date": "Fri, 04 Jan 2008 00:00:00 GMT",
+                "title": "I Am Legend"
+                }
+            ],
+            "success": true
+        }
+        ```
+
+- GET '/movies'
+    - get a list of all movies
+    - Request Arguments : None
+    - Returns : A boolean success, and the list of movies
+    - Request example : 
+        ```
+        curl --location --request GET 'http://localhost:5000/movies/1'
+        ```
+    - Response Sample :
+        ```json
+        {
+            "movies": [
+                {
+                "id": 1,
+                "movie_category": "Action",
+                "movie_rating": "PG-13",
+                "release_date": "Fri, 04 Jan 2008",
+                "title": "I Am Legend"
+                },
+                {
+                "id": 2,
+                "movie_category": "Action",
+                "movie_rating": "R",
+                "release_date": "Fri, 08 Jan 2016",
+                "title": "The Revenant"
+                },
+                {
+                "id": 3,
+                "movie_category": "SciFi",
+                "movie_rating": "PG-13",
+                "release_date": "Fri, 06 Nov 2020",
+                "title": "Black Widow"
+                }
+            ],
+            "success": true
+        }
+        ```
+
+
+- GET '/actors/&lt;movie_id&gt;'
+    - get a specific movie's info
+    - Request Arguments : None
+    - Returns : A boolean success, and a json object representing movie's info
+    - Request example : 
+        ```
+        curl --location --request GET 'http://localhost:5000/movies/1'
+        ```
+    - Response Sample :
+        ```json
+        {
+            "movie": {
+                "id": 1,
+                "movie_category": "Action",
+                "movie_rating": "PG-13",
+                "release_date": "Fri, 04 Jan 2008",
+                "title": "I Am Legend"
+            },
+            "success": true
+        } 
+        ```
+
+- POST '/movies'
+    - create a new movie
+    - Request Arguments : a json object contains movie's info
+    - Returns : A boolean success, and a json object representing movie's info
+    - Request example : 
+        ```
+        curl --location --request POST 'http://localhost:5000/movies' \
+        --header 'Content-Type: application/json' \
+        --data-raw '{
+            "title":"Am Legend",
+            "movie_rating":"PG13",
+            "movie_category":"Action",
+            "release_date":"01/04/2008"
+        }'
+        ```
+    - Response Sample :
+        ```json
+        {
+            "new_movie_id": 4,
+            "success": true
+        } 
+        ```
+
+- PATCH '/movies/&lt;int:movie_id&gt;'
+    - edit movie's info
+    - Request Arguments : a json object contains movie's info
+    - Returns : A boolean success, and the id of the movie just updated
+    - Request example : 
+        ```
+        curl --location --request PATCH 'http://localhost:5000/movies/1' \
+        --header 'Content-Type: application/json' \
+        --data-raw '{
+            "name":"Am Legend",
+            "movie_category":"SciFi"
+        }'
+        ```
+    - Response Sample :
+        ```json
+        {
+            "success": true,
+            "updated": 1
+        } 
+        ```
+
+- GET '/movies/&lt;int:movie_id&gt;/actors'
+    - get a list of all movie's actors
+    - Request Arguments : None
+    - Returns : A boolean success, and a list of movie's actor
+    - Request example : 
+        ```
+        curl --location --request GET 'http://localhost:5000/movies/1/actors'
+        ```
+    - Response Sample :
+        ```json
+        {
+            "actors": [
+                {
+                "age": 62,
+                "gender": "Male",
+                "id": 1,
+                "name": "Will Smith"
+                }
+            ],
+            "success": true
+        } 
+        ```
+
+
+- POST '/movies/&lt;int:movie_id&gt;/actors'
+    - add an actor from a movie's actors list
+    - Request Arguments : a json object contains the id of the actor to be added
+    - Returns : A boolean success, and the id of both actor and movie
+    - Request example : 
+        ```
+        curl --location --request POST 'http://localhost:5000/movies/1/actors' \
+        --header 'Content-Type: application/json' \
+        --data-raw '{
+            "actor_id":2
+        }'
+        ```
+    - Response Sample :
+        ```json
+        {
+            "actor": 2,
+            "movie": 1,
+            "success": true
+        } 
+        ```
+
+- DELETE '/movies/&lt;int:movie_id&gt;/actors'
+    - remove an actor from a movie's actors list
+    - Request Arguments :  json object contains the id of the actor to be deleted
+    - Returns : A boolean success, and the id of both actor and movie
+    - Request example : 
+        ```
+        curl --location --request DELETE 'http://localhost:5000/movies/1/actors' \
+        --header 'Content-Type: application/json' \
+        --data-raw '{
+            "actor_id":2
+        }'
+        ```
+    - Response Sample :
+        ```json
+        {
+            "deleted": 2,
+            "movie": 1,
+            "success": true
+        } 
+        ```
+
+- DELETE '/movies/&lt;int:movie_id&gt;'
+    - delete a movie
+    - Request Arguments :  None
+    - Returns : A boolean success, and the id of the movie just deleted
+    - Request example : 
+        ```
+        curl --location --request DELETE 'http://localhost:5000/movies/4'
+        ```
+    - Response Sample :
+        ```json
+        {
+            "movie": 4,
+            "success": true
+        } 
+        ```
