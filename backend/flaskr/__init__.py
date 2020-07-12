@@ -134,7 +134,7 @@ def create_app():
 
 
     @app.route('/actors/<int:actor_id>',methods=['DELETE'])
-    #@requires_auth('delete:actor')
+    @requires_auth('delete:actor')
     def delete_actor(actor_id):
         actor = Actors.query.get(actor_id)
         deleted=False
@@ -168,7 +168,7 @@ def create_app():
 
 
     @app.route('/actors/<int:actor_id>',methods=['PATCH'])
-    #@requires_auth('edit:actor')
+    @requires_auth('edit:actor')
     def update_actor(actor_id):
         actor_to_update = Actors.query.get(actor_id)
         if(not actor_to_update):

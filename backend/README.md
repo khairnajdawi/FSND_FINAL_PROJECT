@@ -169,7 +169,7 @@ Test your endpoints with [Postman](https://getpostman.com):
         } 
         ```
 
-- GET '/actors/<int : actor_id>'
+- GET '/actors/&lt;int : actor_id&lg;'
     - Gets actor's info
     - Request arguments : None
     - Returns : A boolean success, and a json object of actor's info
@@ -188,7 +188,7 @@ Test your endpoints with [Postman](https://getpostman.com):
         } 
         ```
 
-- DELETE '/actors/<int : actor_id>'
+- DELETE '/actors/&lt;int : actor_id&lg;'
     - deletes an actor identified by the actor_id
     - Request Arguments : None
     - Returns : A boolean success, and the id of the actor just deleted
@@ -202,19 +202,19 @@ Test your endpoints with [Postman](https://getpostman.com):
         } 
         ```
 
-- PATCH '/actors/<int : actor_id>'
+- PATCH '/actors/&lt;int : actor_id&lg;'
     - updates an actor's info whose id is actor_id
     - Request Arguments : one or more attribute of the actor : age, gender, or name
     - Returns : A boolean success, and the id of the actor just updated
     - Request example : 
         ```
-            curl --location --request PATCH 'http://localhost:5000/actors/1'
-            --header 'Content-Type: application/json'
-            --data-raw '{
-                "name":"Will Smith",
-                "age":"62",
-                "gender":"Male"
-            }' 
+        curl --location --request PATCH 'http://localhost:5000/actors/1'
+        --header 'Content-Type: application/json'
+        --data-raw '{
+            "name":"Will Smith",
+            "age":"62",
+            "gender":"Male"
+        }' 
         ```
     - Response Sample :
         ```json
