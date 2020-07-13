@@ -1,1 +1,1 @@
-web: gunicorn -b :5000 backend.flaskr:app
+web: gunicorn -b backend.flaskr:app
