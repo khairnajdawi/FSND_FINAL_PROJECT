@@ -1,9 +1,9 @@
 import os
 from flask import Flask, request, Response, jsonify, abort
 from flask_cors import CORS
-from backend.models import db, setup_db, Actors, Movies
+from models import db, setup_db, Actors, Movies
 import logging
-from backend.auth.auth import AuthError, requires_auth
+from auth.auth import AuthError, requires_auth
 
 
 def create_app():
@@ -58,7 +58,7 @@ def create_app():
         # read form data from post request
         body = request.get_json()
         if(not body):
-            abort(422)
+            abort(400)
         # read post data
         name = body.get('name', None)
         age = body.get('age', None)
@@ -72,7 +72,8 @@ def create_app():
             new_actor = Actors(
                 name=name,
                 age=age,
-                gender=gender)
+                gender=gender
+                )
             # add new actor to db
             added = False
             try:
@@ -81,7 +82,6 @@ def create_app():
                 added = True
             except:
                 db.session.rollback()
-                abort(422)
             finally:
                 db.session.close()
         else:
@@ -211,6 +211,8 @@ def create_app():
     @requires_auth('get:actor-movies')
     def get_actor_movies(payload, actor_id):
         actor = Actors.query.get(actor_id)
+        if(not actor):
+            abort(404)
         movies = [movie.format() for movie in actor.movies]
         return jsonify({
             'success': True,
@@ -380,7 +382,7 @@ def create_app():
             abort(404)
         body = request.get_json()
         if(not body):
-            abort(422)
+            abort(400)
         actor_id = body.get("actor_id", 0)
         actor = Actors.query.get(actor_id)
         if(not actor):
@@ -451,7 +453,7 @@ def create_app():
     def delete_movie(payload, movie_id):
         movie_to_delete = Movies.query.get(movie_id)
         if(not movie_to_delete):
-            abort(422)
+            abort(404)
         deleted = False
         try:
             movie_to_delete.delete()

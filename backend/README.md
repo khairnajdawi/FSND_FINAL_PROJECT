@@ -117,7 +117,9 @@ Test your endpoints with [Postman](https://getpostman.com):
         -to run test environment, navigate to backend directory then run command :
         ``` source test_setup.sh ```
         it will create test db and adds some data then start flask app
-
+- Using unittest
+    - use the provided test_flaskr.py to test the endpoints, just edit the header variable and provide a token for a user with all permissions
+    
 ## Endpoints
 - GET '/actors'
     - gets a list of all actors
