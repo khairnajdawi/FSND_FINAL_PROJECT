@@ -1,10 +1,10 @@
 import os
 from flask import Flask, request, Response, jsonify, abort
 from flask_cors import CORS
-from backend.models import db, setup_db, Actors, Movies
+from models import db, setup_db, Actors, Movies
 import logging
 from flask import session
-from backend.auth.auth import AuthError, requires_auth
+from auth.auth import AuthError, requires_auth
 
 
 def create_app():

@@ -113,6 +113,10 @@ Test your endpoints with [Postman](https://getpostman.com):
     - Right-clicking the collection folder for barista and manager, navigate to the authorization tab, and including the JWT in the token field (you should have noted these JWTs).
     - Run the collection and correct any errors.
     - Export the collection overwriting the one we've included so that we have your proper JWTs during review!
+    - you can use a test db , all needed command can be found in test_setup.sh.
+        -to run test environment, navigate to backend directory then run command :
+        ``` source test_setup.sh ```
+        it will create test db and adds some data then start flask app
 
 ## Endpoints
 - GET '/actors'
