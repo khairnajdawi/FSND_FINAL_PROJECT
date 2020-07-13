@@ -23,10 +23,9 @@ def setup_db(app, database_path=database_path):
     db.app = app
     db.init_app(app)
 
-
 '''
 Actors
-Have name and is_available state 
+Have name and is_available state
 to check if this actor can be assigned to a movie
 also age and gender
 '''
@@ -38,7 +37,7 @@ class Actors(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(String, nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    gender =db.Column(db.String, nullable=False)
+    gender = db.Column(db.String, nullable=False)
 
     def __init__(self, name, age, gender):
         self.name = name
@@ -48,7 +47,7 @@ class Actors(db.Model):
     def insert(self):
         db.session.add(self)
         db.session.commit()
-    
+
     def update(self):
         db.session.commit()
 
@@ -63,7 +62,6 @@ class Actors(db.Model):
           'age': self.age,
           'gender': self.gender
           }
-
 
 '''
 Movies Category Enum
@@ -85,17 +83,16 @@ class MoviesCategory(enum.Enum):
     Musical = 'Musical'
     Documentary = 'Documentary'
 
-
 '''
 Movies Rating Enum
 '''
+
 
 class MoviesRating(enum.Enum):
     G = 'G'
     PG = 'PG'
     PG13 = 'PG-13'
     R = 'R'
-
 
 '''
 Movie Class
@@ -106,13 +103,17 @@ class Movies(db.Model):
     __tablename__ = 'Movies'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(String,nullable=False)
-    release_date = db.Column(db.Date,nullable=False)
-    movie_category = db.Column(db.Enum(MoviesCategory),nullable=False)
-    movie_rating = db.Column(db.Enum(MoviesRating),nullable=False)
-    actors = db.relationship('Actors',secondary="MovieActors",backref=db.backref('movies',lazy=True))
+    title = db.Column(String, nullable=False)
+    release_date = db.Column(db.Date, nullable=False)
+    movie_category = db.Column(db.Enum(MoviesCategory), nullable=False)
+    movie_rating = db.Column(db.Enum(MoviesRating), nullable=False)
+    actors = db.relationship(
+        'Actors',
+        secondary="MovieActors",
+        backref=db.backref('movies', lazy=True)
+        )
 
-    def __init__(self, title,release_date, movie_category, movie_rating):
+    def __init__(self, title, release_date, movie_category, movie_rating):
         self.title = title
         self.release_date = release_date
         self.movie_category = movie_category
@@ -121,7 +122,7 @@ class Movies(db.Model):
     def insert(self):
         db.session.add(self)
         db.session.commit()
-    
+
     def update(self):
         db.session.commit()
 
@@ -133,7 +134,7 @@ class Movies(db.Model):
         return {
           'id': self.id,
           'title': self.title,
-          'release_date' : self.release_date,
+          'release_date': self.release_date,
           'movie_category': self.movie_category.value,
           'movie_rating': self.movie_rating.value
           }
@@ -144,6 +145,16 @@ Movie Actor Relation
 
 MovieActors = db.Table(
     'MovieActors',
-    db.Column('movie_id',db.Integer,db.ForeignKey('Movies.id'),primary_key=True),
-    db.Column('actor_id',db.Integer,db.ForeignKey('Actors.id'),primary_key=True)
+    db.Column(
+        'movie_id',
+        db.Integer,
+        db.ForeignKey('Movies.id'),
+        primary_key=True
+        ),
+    db.Column(
+        'actor_id',
+        db.Integer,
+        db.ForeignKey('Actors.id'),
+        primary_key=True
+    )
 )

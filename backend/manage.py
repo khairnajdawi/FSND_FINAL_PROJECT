@@ -5,7 +5,7 @@ from flaskr import create_app
 from models import db
 
 app = create_app()
-migrate = Migrate(app, db,compare_type=True)
+migrate = Migrate(app, db, compare_type=True)
 manager = Manager(app)
 
 manager.add_command('db', MigrateCommand)
