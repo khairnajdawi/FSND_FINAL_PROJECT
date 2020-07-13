@@ -1,1 +1,1 @@
-web: gunicorn -b backend.flaskr:app
+web: gunicorn backend.flaskr:app
