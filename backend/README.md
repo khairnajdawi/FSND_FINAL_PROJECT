@@ -445,3 +445,11 @@ Test your endpoints with [Postman](https://getpostman.com):
 ```
 heroku run python ./backend/manage.py db upgrade --directory ./backend/migrations
 ```
+
+## Running Locally :
+to run the backend locally, navigate to backend directory and run the command
+```
+gunicorn -b 0.0.0.0:5000 flaskr:app
+```
+you might need to edit flaskr and auth files and remove the backend. from the import statements
+```
