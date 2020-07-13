@@ -1,1 +1,1 @@
-web: gunicorn -b :8000 backend.flaskr:app
+web: gunicorn -b 127.0.0.1:8000 backend.flaskr:app
