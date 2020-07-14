@@ -1,12 +1,24 @@
-{% extends 'layouts/main.html' %}
-{% block title %}Casting Agency System{% endblock %}
-{% block content %}
-<div class="row">
-<div class="container-fluid jumbotron box-out">
-    <h1 class="display-4">Casting Agency System!</h1>
-    <hr class="my-4">
-    <p class="lead">This system is for Casting Agency to Create Movies and add Actors to it</p>
-    <a class="btn btn-primary btn-lg" href="/login" role="button">Login</a>
-  </div>
-</div>
-{% endblock %}
+<html>
+    <head>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- font awesome from BootstrapCDN -->
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+        <link href="/public/app.css" rel="stylesheet">
+    </head>
+    <body class="home">
+        <div class="container">
+            <div class="login-page clearfix">
+              <div class="login-box auth0-box before">
+                <img src="https://i.cloudup.com/StzWWrY34s.png" />
+                <h3>Auth0 Example</h3>
+                <p>Zero friction identity infrastructure, built for developers</p>
+                <a id="qsLoginBtn" class="btn btn-primary btn-lg btn-login btn-block" href="/login">Log In</a>
+              </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,233 +1,140 @@
+"""Python Flask WebApp Auth0 integration example
+"""
+from functools import wraps
+import json
+from os import environ as env
+from werkzeug.exceptions import HTTPException
 
-    # @app.route('/actors/add')
-    # def add_actor_form():
-    #     form = AddActorForm()
-    #     return render_template('pages/actors/add.html',form=form)
+from dotenv import load_dotenv, find_dotenv
+from flask import Flask, request
+from flask import jsonify
+from flask import redirect
+from flask import render_template
+from flask import session
+from flask import url_for
+from authlib.integrations.flask_client import OAuth
+from six.moves.urllib.parse import urlencode
+import http.client
+import constants
 
+ENV_FILE = find_dotenv()
+if ENV_FILE:
+    load_dotenv(ENV_FILE)
 
-    # @app.route('/actors/add', methods=["POST"])
-    # def add_actor():
-    #     form = AddActorForm(request.form)
-    #     added=False
-    #     try:
-    #         new_actor = Actors(
-    #             name=form.name.data,
-    #             age = form.age.data,
-    #             gender = form.gender.data,
-    #             is_available = form.is_available.data=="True"
-    #         )
-    #         db.session.add(new_actor)
-    #         db.session.commit()
-    #         added=True
-    #     except:
-    #         db.session.rollback()
-    #     finally:
-    #         db.session.close()
+AUTH0_CALLBACK_URL = 'http://localhost:3000/login-result'
+AUTH0_CLIENT_ID = 'nm6XTUr2X9Nyefwrql8h8Tcw7inGGkgX'
+AUTH0_CLIENT_SECRET = 'PKCuDxSCLSoqJ4ew_RSyDy4wwfZkne4hcyYJ5Zz7Cb1ZxrGBpPYXvPMjwqiFLhEf'
+AUTH0_DOMAIN = 'kj-casting-agency.us.auth0.com'
+AUTH0_BASE_URL = 'https://' + AUTH0_DOMAIN
+AUTH0_AUDIENCE = 'https://kj-casting-system.herukoapp.com'
 
-    #     if(added):
-    #         flash('New Actor added successfully','success')
-    #         return redirect(url_for('actors'))
-    #     else:
-    #         flash('Could not add new Actor','danger')
-    #         return render_template('pages/actors/add.html',form=form)
+app = Flask(__name__, static_url_path='/static', static_folder='./static')
+app.secret_key = constants.SECRET_KEY
+app.debug = True
 
+oauth = OAuth(app)
 
-    # @app.route('/actors/<int:actor_id>/edit')
-    # def edit_actor_form(actor_id):   
-    #     # check if requested actor id does exist
-    #     actor = Actors.query.get(actor_id)     
-    #     if(actor==None):
-    #         # if not exist, return to actors list and flash an error
-    #         flash('Requested Actor could not be found !!','danger')
-    #         return redirect(url_for('actors'))
-    #     # if exist, prepare form with actor info
-    #     form = AddActorForm()
-    #     form.name.data = actor.name
-    #     form.age.data = actor.age
-    #     form.gender.data = actor.gender
-    #     form.is_available.data = "True" if actor.is_available else "False"
-    #     return render_template('pages/actors/edit.html',form=form)
-
-
-    # @app.route('/actors/<int:actor_id>/edit',methods=['POST'])
-    # def edit_actor(actor_id):           
-    #     form = AddActorForm(request.form)
-    #     updated=False
-    #     try:
-    #         actor = Actors.query.get(actor_id)            
-    #         actor.name=form.name.data,
-    #         actor.age = form.age.data,
-    #         actor.gender = form.gender.data,
-    #         actor.is_available = form.is_available.data=="True"            
-    #         db.session.commit()
-    #         updated=True
-    #     except:
-    #         db.session.rollback()
-    #     finally:
-    #         db.session.close()
-
-    #     if(updated):
-    #         flash('Actor\'s info updated successfully','success')
-    #         return redirect(url_for('actors'))
-    #     else:
-    #         flash('Could not update Actor\'s info','danger')
-    #         return render_template('pages/actors/edit.html',form=form)
-
-
-    # @app.route('/actors/<int:actor_id>/delete')
-    # def delete_actor_form(actor_id):   
-    #     # check if requested actor id does exist
-    #     actor = Actors.query.get(actor_id)     
-    #     if(actor==None):
-    #         # if not exist, return to actors list and flash an error
-    #         flash('Requested Actor could not be found !!','danger')
-    #         return redirect(url_for('actors'))
-    #     # if exist, prepare form with actor info
-    #     return render_template('pages/actors/delete.html',actor=actor)
-
-
-    # @app.route('/actors/<int:actor_id>/delete',methods=["POST"])
-    # def delete_actor(actor_id):   
-    #     # check if requested actor id does exist
-    #     actor = Actors.query.get(actor_id)     
-    #     if(actor==None):
-    #         # if not exist, return to actors list and flash an error
-    #         flash('Requested Actor could not be found !!','danger')
-    #         return redirect(url_for('actors'))
-    #     # if exist, delete and return to actors list
-    #     elif(len(actor.movies) > 0):
-    #         flash("Could not delete Actor, There is a related movie(s)!","danger")
-    #         return render_template('pages/actors/delete.html',actor=actor)
-    #     else:
-    #         deleted=False
-    #         try:
-    #             db.session.delete(actor)
-    #             db.session.commit()
-    #             deleted=True
-    #         except:
-    #             db.session.rollback()
-    #         finally:
-    #             db.session.close()
-
-    #         if(deleted):
-    #             flash("Actor deleted successfully!","success")
-    #             return redirect(url_for("actors"))
-    #         else:
-    #             flash("Could not delete Actor!","danger")
-    #             return render_template('pages/actors/delete.html',actor=actor)
+auth0 = oauth.register(
+    'auth0',
+    client_id=AUTH0_CLIENT_ID,
+    client_secret=AUTH0_CLIENT_SECRET,
+    api_base_url=AUTH0_BASE_URL,
+    access_token_url=AUTH0_BASE_URL + '/oauth/token',
+    authorize_url=AUTH0_BASE_URL + '/authorize',
+    client_kwargs={
+        'scope': 'openid profile email',
+    },
+)
 
 
 
-    # @app.route('/actors/<int:actor_id>')
-    # def actor_info(actor_id):   
-    #     # check if requested actor id does exist
-    #     actor = Actors.query.get(actor_id)     
-    #     if(actor==None):
-    #         # if not exist, return to actors list and flash an error
-    #         flash('Requested Actor could not be found !!','danger')
-    #         return redirect(url_for('actors'))
-    #     # if exist, prepare form with actor info
-    #     return render_template('pages/actors/info.html',actor=actor)
+def requires_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if constants.PROFILE_KEY not in session:
+            return redirect('/login')
+        return f(*args, **kwargs)
+
+    return decorated
 
 
-    # @app.route('/movies')
-    # def movies():
-    #     movies = Movies.query.all()
-    #     return render_template('pages/movies/list.html',movies=movies)
+# Controllers API
+@app.route('/')
+def home():
+    return render_template('pages/index.html')
 
 
-    # @app.route('/movies/add')
-    # def add_movie_form():
-    #     form = MovieForm()
-    #     return render_template('pages/movies/add.html',form=form)
+@app.route('/login-result')
+def callback_handling():
+    auth0.authorize_access_token()
+    resp = auth0.get('userinfo')
+    userinfo = resp.json()
+
+    session[constants.JWT_PAYLOAD] = userinfo
+    session[constants.PROFILE_KEY] = {
+        'user_id': userinfo['sub'],
+        'name': userinfo['name'],
+        'picture': userinfo['picture']
+    }
+    code = request.get('code');
+    print(code)
+
+    conn = http.client.HTTPSConnection("")
+
+    payload = "grant_type=authorization_code&client_id=${account.clientId}&client_secret={AUTH0_CLIENT_SECRET}&code={code}&redirect_uri=${account.callback}"
+
+    headers = { 'content-type': "application/x-www-form-urlencoded" }
+
+    conn.request("POST", "/{AUTH0_DOMAIN}/oauth/token", payload, headers)
+
+    res = conn.getresponse()
+    data = res.read()
+
+    print(data.decode("utf-8"))
+
+    return redirect('/movies')
 
 
-    # @app.route('/movies/add',methods=['POST'])
-    # def add_movie():
-    #     form = MovieForm(request.form)
-    #     added=False
-    #     movie_id=0
-    #     try:
-    #         new_movie = Movies(
-    #             name = form.name.data,
-    #             movie_status = form.movie_status.data,
-    #             movie_category = form.movie_category.data,
-    #             movie_rating = form.movie_rating.data
-    #         )
-    #         db.session.add(new_movie)
-    #         db.session.commit()
-    #         movie_id = new_movie.id
-    #         added=True
-    #     except:
-    #         db.session.rollback()
-    #     finally:
-    #         db.session.close()
-    #     if(added):
-    #         flash("Movie added successfully","success")
-    #         return redirect("/movies/{0}/actors".format(movie_id))
-    #     else:
-    #         flash("Could not add new movie!","danger")
-    #         return render_template('pages/movies/add.html',form=form)
+@app.route('/login')
+def login():
+    return auth0.authorize_redirect(redirect_uri=AUTH0_CALLBACK_URL, audience=AUTH0_AUDIENCE)
 
-    # @app.route('/movies/<int:movie_id>')
-    # def movie_info(movie_id):
-    #     movie = Movies.query.get(movie_id)
-    #     return render_template('pages/movies/info.html',movie=movie)
 
-    # @app.route('/movies/<int:movie_id>/actors')
-    # def movie_actors_form(movie_id):
-    #     form = MovieActorsForm()        
-    #     movie = Movies.query.get(movie_id)
-    #     available_actors = Actors.query.filter(~Actors.id.in_([actor.id for actor in movie.actors])).all()
-    #     form.Actor.choices = [(actor.id,actor.name) for actor in available_actors]
-    #     return render_template('pages/movies/actors.html',movie=movie,form=form)
-    
-    # @app.route('/movies/<int:movie_id>/actors',methods=['POST'])
-    # def movie_actors(movie_id):
-    #     form = MovieActorsForm(request.form)        
-    #     movie = Movies.query.get(movie_id)
-    #     added=False
-    #     try:
-    #         actor_id = form.Actor.data
-    #         actor_to_add = Actors.query.get(actor_id)
-    #         movie.actors.append(actor_to_add)
-    #         db.session.commit()
-    #         added=True
-    #     except:
-    #         db.session.rollback()
-    #     finally:
-    #         db.session.close()
-    #     if(added):
-    #         flash("Actors added successfully","success")
-    #     else:
-    #         flash("Could not add Actor","danger") 
-    #     movie = Movies.query.get(movie_id)
-    #     available_actors = Actors.query.filter(~Actors.id.in_([actor.id for actor in movie.actors])).all()
-    #     form.Actor.choices = [(actor.id,actor.name) for actor in available_actors]
-    #     return render_template('pages/movies/actors.html',movie=movie,form=form)
-    
-    # @app.route('/movies/<int:movie_id>/actors',methods=['DELETE'])
-    # def delete_movie_actors(movie_id):
-    #     form = MovieActorsForm()        
-    #     movie = Movies.query.get(movie_id)
-    #     deleted=False
-    #     try:
-    #         actor_id = request.get_data("actor_id")
-    #         actor_to_delete = Actors.query.get(actor_id)
-    #         movie.actors.remove(actor_to_delete)
-    #         db.session.commit()
-    #         deleted=True
-    #     except:
-    #         db.session.rollback()
-    #     finally:
-    #         db.session.close()
-    #     if(deleted):
-    #         flash("Actors deleted successfully","success")
-    #     else:
-    #         flash("Could not delete Actor","danger") 
-    #     movie = Movies.query.get(movie_id)
-    #     available_actors = Actors.query.filter(~Actors.id.in_([actor.id for actor in movie.actors])).all()
-    #     form.Actor.choices = [(actor.id,actor.name) for actor in available_actors]
-    #     return render_template('pages/movies/actors.html',movie=movie,form=form)
+@app.route('/logout')
+def logout():
+    session.clear()
+    params = {'returnTo': url_for('home', _external=True), 'client_id': AUTH0_CLIENT_ID}
+    return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
-  
+
+@app.route('/dashboard')
+@requires_auth
+def dashboard():
+    return render_template('pages/dashboard.html',
+                           userinfo=session[constants.PROFILE_KEY],
+                           userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4))
+
+@app.route('/actors')
+@requires_auth 
+def actors():
+    actors = []
+    return render_template('pages/actors/list.html',actors=actors)
+
+
+@app.route('/movies')
+def movies():
+    movies = []
+    return render_template('pages/movies/list.html',movies=movies)
+
+
+
+@app.errorhandler(Exception)
+def handle_auth_error(ex):
+    response = jsonify(message=str(ex))
+    response.status_code = (ex.code if isinstance(ex, HTTPException) else 500)
+    return response
+
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=env.get('PORT', 3000))
+
