@@ -23,7 +23,8 @@ if ENV_FILE:
 
 AUTH0_CALLBACK_URL = 'http://localhost:3000/login-result'
 AUTH0_CLIENT_ID = 'nm6XTUr2X9Nyefwrql8h8Tcw7inGGkgX'
-AUTH0_CLIENT_SECRET = 'PKCuDxSCLSoqJ4ew_RSyDy4wwfZkne4hcyYJ5Zz7Cb1ZxrGBpPYXvPMjwqiFLhEf'
+AUTH0_CLIENT_SECRET =\
+    'PKCuDxSCLSoqJ4ew_RSyDy4wwfZkne4hcyYJ5Zz7Cb1ZxrGBpPYXvPMjwqiFLhEf'
 AUTH0_DOMAIN = 'kj-casting-agency.us.auth0.com'
 AUTH0_BASE_URL = 'https://' + AUTH0_DOMAIN
 AUTH0_AUDIENCE = 'https://kj-casting-system.herukoapp.com'
@@ -45,7 +46,6 @@ auth0 = oauth.register(
         'scope': 'openid profile email',
     },
 )
-
 
 
 def requires_auth(f):
@@ -76,56 +76,63 @@ def callback_handling():
         'name': userinfo['name'],
         'picture': userinfo['picture']
     }
-    code = request.get('code');
-    print(code)
+    # get access token
+    # print(code)
+    # conn = http.client.HTTPSConnection("")
+    # payload = "grant_type=authorization_code&client_id=${account.clientId}&
+    # client_secret={AUTH0_CLIENT_SECRET}&code={code}&redirect_uri=${account.callback}"
+    # headers = { 'content-type': "application/x-www-form-urlencoded" }
+    # conn.request("POST", "/{AUTH0_DOMAIN}/oauth/token", payload, headers)
+    # res = conn.getresponse()
+    # data = res.read()
 
-    conn = http.client.HTTPSConnection("")
-
-    payload = "grant_type=authorization_code&client_id=${account.clientId}&client_secret={AUTH0_CLIENT_SECRET}&code={code}&redirect_uri=${account.callback}"
-
-    headers = { 'content-type': "application/x-www-form-urlencoded" }
-
-    conn.request("POST", "/{AUTH0_DOMAIN}/oauth/token", payload, headers)
-
-    res = conn.getresponse()
-    data = res.read()
-
-    print(data.decode("utf-8"))
+    # print(data.decode("utf-8"))
 
     return redirect('/movies')
 
 
 @app.route('/login')
 def login():
-    return auth0.authorize_redirect(redirect_uri=AUTH0_CALLBACK_URL, audience=AUTH0_AUDIENCE)
+    return auth0.authorize_redirect(
+        redirect_uri=AUTH0_CALLBACK_URL,
+        audience=AUTH0_AUDIENCE
+        )
 
 
 @app.route('/logout')
 def logout():
     session.clear()
-    params = {'returnTo': url_for('home', _external=True), 'client_id': AUTH0_CLIENT_ID}
+    params = {
+        'returnTo': url_for('home', _external=True),
+        'client_id': AUTH0_CLIENT_ID
+        }
     return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
 
 @app.route('/dashboard')
 @requires_auth
 def dashboard():
-    return render_template('pages/dashboard.html',
-                           userinfo=session[constants.PROFILE_KEY],
-                           userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4))
+    return render_template(
+        'pages/dashboard.html',
+        userinfo=session[constants.PROFILE_KEY],
+        userinfo_pretty=json.dumps(
+            session[constants.JWT_PAYLOAD],
+            indent=4
+            )
+        )
+
 
 @app.route('/actors')
-@requires_auth 
+@requires_auth
 def actors():
     actors = []
-    return render_template('pages/actors/list.html',actors=actors)
+    return render_template('pages/actors/list.html', actors=actors)
 
 
 @app.route('/movies')
 def movies():
     movies = []
-    return render_template('pages/movies/list.html',movies=movies)
-
+    return render_template('pages/movies/list.html', movies=movies)
 
 
 @app.errorhandler(Exception)
@@ -137,4 +144,3 @@ def handle_auth_error(ex):
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=env.get('PORT', 3000))
-

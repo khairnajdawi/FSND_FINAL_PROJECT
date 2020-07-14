@@ -7,7 +7,7 @@ from backend.auth.auth import AuthError, requires_auth
 
 
 def create_app():
-
+    #
     app = Flask(__name__)
     setup_db(app)
     cors = CORS(app, resources={r"/*": {"origins": "*"}})
@@ -24,6 +24,8 @@ def create_app():
             'GET,POST,DELETE,PATCH,INFO'
             )
         return response
+
+    # Endpoints
 
     '''
     Get /actors
@@ -108,9 +110,12 @@ def create_app():
     @app.route('/actors/<int:actor_id>', methods=['GET'])
     @requires_auth('get:actor-info')
     def get_actor_info(payload, actor_id):
+        # get list of actor identified by actor_id
         actor = Actors.query.get(actor_id)
+        # if actor does not exist, return 404 code
         if(not actor):
             abort(404)
+        # if exist, return json object with success and actor's info
         return jsonify(
             {
                 'success': True,
@@ -130,9 +135,11 @@ def create_app():
     @app.route('/actors/<int:actor_id>', methods=['DELETE'])
     @requires_auth('delete:actor')
     def delete_actor(payload, actor_id):
+        # check if actor exist by querying Actors by the actor_id
         actor = Actors.query.get(actor_id)
         deleted = False
         if(actor):
+            # if actor exist, try delete
             try:
                 actor.delete()
                 deleted = True
@@ -141,8 +148,9 @@ def create_app():
             finally:
                 db.session.close()
         else:
+            # if actor not exist, return 404 code
             abort(404)
-        # return json response for success
+        # return json response for success, with the deleted actor's id
         return jsonify(
             {
                 'success': deleted,
@@ -163,18 +171,20 @@ def create_app():
     @requires_auth('edit:actor')
     def update_actor(payload, actor_id):
         actor_to_update = Actors.query.get(actor_id)
+        # check if actor exist, if not return 404 code
         if(not actor_to_update):
             abort(404)
         # read form data from post request
         body = request.get_json()
+        # check if data not provided, then return 422 code
         if(not body):
             abort(422)
         # read post data
         name = body.get('name', None)
         age = body.get('age', None)
         gender = body.get('gender', None)
-        # check if all required data is available,
-        # if so, then add the actor
+        # check for each attribute if provided
+        # updated provided info
         updated = False
         if(name):
             actor_to_update.name = name
@@ -190,7 +200,7 @@ def create_app():
             abort(422)
         finally:
             db.session.close()
-        # return json response for success
+        # return json response for success with the updated actor's id
         return jsonify(
             {
                 'success': updated,
@@ -211,9 +221,12 @@ def create_app():
     @requires_auth('get:actor-movies')
     def get_actor_movies(payload, actor_id):
         actor = Actors.query.get(actor_id)
+        # check if actor exist, if not return 404 code
         if(not actor):
             abort(404)
+        # prepare a list of movies for that actor
         movies = [movie.format() for movie in actor.movies]
+        # return json response with success and movie's list
         return jsonify({
             'success': True,
             'movies': movies
@@ -231,8 +244,11 @@ def create_app():
     @app.route('/movies')
     @requires_auth('get:movies')
     def get_movies(payload):
+        # get all movies list
         movies = Movies.query.all()
+        # prepare as formatted objects, to jsonify
         movies_formatted = [movie.format() for movie in movies]
+        # return json reponse with success and movies list
         return jsonify({
             'success': True,
             'movies': movies_formatted
@@ -250,9 +266,12 @@ def create_app():
     @app.route('/movies/<int:movie_id>')
     @requires_auth('get:movie-info')
     def get_movie_info(payload, movie_id):
+        # query Movies to get movie identified by movie_id
         movie = Movies.query.get(movie_id)
+        # if movie not exist, return 404 code
         if(not movie):
             abort(404)
+        # return json reponse with success and movie's info
         return jsonify({
             'success': True,
             'movie': movie.format()
@@ -270,17 +289,22 @@ def create_app():
     @app.route('/movies', methods=['POST'])
     @requires_auth('create:movie')
     def create_movie(payload):
+        # get request paramtetes
         body = request.get_json()
+        # if not provided, return 400 code
         if(not body):
             abort(400)
+        # read parameters
         title = body.get('title', None)
         release_date = body.get('release_date', None)
         movie_category = body.get('movie_category', None)
         movie_rating = body.get('movie_rating', None)
         created = False
         new_movie_id = 0
+        # check all required attribute is provided
         if(title and release_date and movie_category and movie_rating):
             try:
+                # prepare new movie object from provided data and insert to db
                 new_movie = Movies(
                     title=title,
                     release_date=release_date,
@@ -295,7 +319,9 @@ def create_app():
             finally:
                 db.session.close()
         else:
+            # if not all required attributes provided, return 422 code
             abort(422)
+        # return json reponse with success and new movie's id
         return jsonify({
             'success': created,
             'new_movie_id': new_movie_id
@@ -313,12 +339,17 @@ def create_app():
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])
     @requires_auth('edit:movie')
     def update_movie(payload, movie_id):
+        # get the movie to be updated
         movie_to_update = Movies.query.get(movie_id)
+        # if movie not exist, return 404
         if(not movie_to_update):
             abort(404)
+        # read request data
         body = request.get_json()
+        # if data not provided, return 400
         if(not body):
             abort(400)
+        # read data and update availabe attributes
         title = body.get('title', None)
         release_date = body.get('release_date', None)
         movie_category = body.get('movie_category', None)
@@ -332,6 +363,7 @@ def create_app():
             movie_to_update.movie_category = movie_category
         if(movie_rating):
             movie_to_update.movie_rating = movie_rating
+        # try saving changes
         try:
             movie_to_update.update()
             updated = True
@@ -339,6 +371,7 @@ def create_app():
             db.session.rollback()
         finally:
             db.session.close()
+        # return json with success result and the movie's id just updated
         return jsonify({
             'success': updated,
             'updated': movie_id
@@ -356,10 +389,14 @@ def create_app():
     @app.route('/movies/<int:movie_id>/actors')
     @requires_auth('get:movie-actors')
     def get_movie_actors(payload, movie_id):
+        # get the movie to read actors list
         movie = Movies.query.get(movie_id)
+        # if movie not available, return 404 code
         if(not movie):
             abort(404)
+        # prepare a list of all movie's actors
         actors = [actor.format() for actor in movie.actors]
+        # return json response with successs and actors list
         return jsonify({
             'success': True,
             'actors': actors
@@ -377,17 +414,25 @@ def create_app():
     @app.route('/movies/<int:movie_id>/actors', methods=['POST'])
     @requires_auth('add:movie-actor')
     def add_movie_actors(payload, movie_id):
+        # get the movie to add actors for
         movie = Movies.query.get(movie_id)
+        # if movie not exist, return 404 code
         if(not movie):
             abort(404)
+        # read request
         body = request.get_json()
+        # if request not available, return 400 code
         if(not body):
             abort(400)
+        # get the actor's id from request
         actor_id = body.get("actor_id", 0)
+        # get the actor identified by actor_id
         actor = Actors.query.get(actor_id)
+        # if actor not exist, return 402 code
         if(not actor):
             abort(422)
         added = False
+        # try to add actor to movie's actors list
         try:
             movie.actors.append(actor)
             db.session.commit()
@@ -396,6 +441,7 @@ def create_app():
             db.session.rollback()
         finally:
             db.session.close()
+        # return json response with success result, movie's id and actor's id
         return jsonify({
             'success': added,
             'movie': movie_id,
@@ -414,16 +460,24 @@ def create_app():
     @app.route('/movies/<int:movie_id>/actors', methods=['DELETE'])
     @requires_auth('delete:movie-actor')
     def delete_movie_actors(payload, movie_id):
+        # get the movie to delete actor from
         movie = Movies.query.get(movie_id)
+        # if movie not exist, return 404 code
         if(not movie):
             abort(404)
+        # read request
         body = request.get_json()
+        # if request not available, return 400 code
         if(not body):
-            abort(422)
+            abort(400)
+        # get the actor's id from request
         actor_id = body.get("actor_id", 0)
+        # get the actor identified by actor_id
         actor = Actors.query.get(actor_id)
+        # if actor not exist, return 402 code
         if(not actor):
             abort(422)
+        # try to delete actor to movie's actors list
         deleted = False
         try:
             movie.actors.remove(actor)
@@ -433,6 +487,7 @@ def create_app():
             db.session.rollback()
         finally:
             db.session.close()
+        # return json response with success result, movie's id and actor's id
         return jsonify({
             'success': deleted,
             'movie': movie_id,
@@ -451,10 +506,13 @@ def create_app():
     @app.route('/movies/<int:movie_id>', methods=['DELETE'])
     @requires_auth('delete:movie')
     def delete_movie(payload, movie_id):
+        # get the movie to be deleted
         movie_to_delete = Movies.query.get(movie_id)
+        # if the movie not exist, return 404
         if(not movie_to_delete):
             abort(404)
         deleted = False
+        # try to delete the movie
         try:
             movie_to_delete.delete()
             deleted = True
@@ -463,10 +521,13 @@ def create_app():
         finally:
             db.session.close()
 
+        # return json response with success result and movie's id just deleted
         return jsonify({
             'success': deleted,
             'movie': movie_id
         })
+
+    # Errors Handlers
 
     '''
     Create error handlers for all expected errors

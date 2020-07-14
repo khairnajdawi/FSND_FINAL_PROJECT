@@ -1,4 +1,6 @@
-""" Constants file for Auth0's seed project
+""" 
+Constants file for Auth0's 
+for heroku, these can be converted to environment variables
 """
 AUTH0_CLIENT_ID = 'nm6XTUr2X9Nyefwrql8h8Tcw7inGGkgX'
 AUTH0_CLIENT_SECRET = 'PKCuDxSCLSoqJ4ew_RSyDy4wwfZkne4hcyYJ5Zz7Cb1ZxrGBpPYXvPMjwqiFLhEf'

@@ -1115,7 +1115,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik95QUxwckNURjZqY2x3d3JBekFTRSJ9.eyJpc3MiOiJodHRwczovL2tqLWNhc3RpbmctYWdlbmN5LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1ZjBiNmU5M2ExNWI3YjAwMTM2MjEyODUiLCJhdWQiOiJodHRwczovL2tqLWNhc3Rpbmctc3lzdGVtLmhlcnVrb2FwcC5jb20iLCJpYXQiOjE1OTQ1ODU3NDQsImV4cCI6MTU5NDU5Mjk0NCwiYXpwIjoibm02WFRVcjJYOU55ZWZ3cnFsOGg4VGN3N2luR0drZ1giLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImdldDphY3Rvci1pbmZvIiwiZ2V0OmFjdG9yLW1vdmllcyIsImdldDphY3RvcnMiLCJnZXQ6bW92aWUtYWN0b3JzIiwiZ2V0Om1vdmllLWluZm8iLCJnZXQ6bW92aWVzIl19.AmxPZA7HWrFWGYBKEDLr24hmsvS5wRHdqqnVbllZd3ekROHprVyM2vtJYKymmxwbFspk9vLMwJepi-XfuE_KhyL4FtM5NA9NvwplFnoTUzXbjBNINujVKXrhPzJlTsRiuJAcRLrrFFeGBnDXm2NX92fNKvY-C9Sl7cuhKsc5uPRFHGoGRAIcKB2muikPJSRgui2etsUI03RDQDWzsBCfvvPqNK7E2qot8O6qTho0ELKGZnxNXgee2hlvFtKgpyoB57CqWefi8d3D1tDxogxeN6sD-Y1vs5PJF_BmExID_WFbBTlGvW65cRghXO8OF0HBdAhx6BWThT9fzWWb4h7gZw",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik95QUxwckNURjZqY2x3d3JBekFTRSJ9.eyJpc3MiOiJodHRwczovL2tqLWNhc3RpbmctYWdlbmN5LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1ZjBiNmU5M2ExNWI3YjAwMTM2MjEyODUiLCJhdWQiOiJodHRwczovL2tqLWNhc3Rpbmctc3lzdGVtLmhlcnVrb2FwcC5jb20iLCJpYXQiOjE1OTQ3NDUwOTcsImV4cCI6MTU5NDgzMTQ5NywiYXpwIjoibm02WFRVcjJYOU55ZWZ3cnFsOGg4VGN3N2luR0drZ1giLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImdldDphY3Rvci1pbmZvIiwiZ2V0OmFjdG9yLW1vdmllcyIsImdldDphY3RvcnMiLCJnZXQ6bW92aWUtYWN0b3JzIiwiZ2V0Om1vdmllLWluZm8iLCJnZXQ6bW92aWVzIl19.XYqQwu2-zFNQzPjv48Dru35AP1vZ8U-LHPJTsOieaDCeHChnJxEMhCU0MVY9u7Ov7XOz-1R_nS6YS9Ayp1owS5pHhAvI5QvYYFvAkca_6t7M3f3WWiiwyCjFnVu6TGQ68grzK4fO-Oj4MFTh6gIY5isMeHsQlaGDSIrKssiQBmumnpxba20mbMy6tkrODJ0X-86VCAG9scV2WfIpnKdB9SfZwkvihLrCOa-wPaOhciYf3A3GK-TSJGhdonr37G-Zc0krvAtcRK53PJWvBuk3KdbsHdD6JpjyWShYluWdA3SV4CRran4v0qBkQThodwlTaceQ5j_HJbj7DsxpIgv9Zg",
 						"type": "string"
 					}
 				]
@@ -1737,7 +1737,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik95QUxwckNURjZqY2x3d3JBekFTRSJ9.eyJpc3MiOiJodHRwczovL2tqLWNhc3RpbmctYWdlbmN5LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1ZjBiNzYzZmZkMzBlMjAwMTM2NjYzYjciLCJhdWQiOiJodHRwczovL2tqLWNhc3Rpbmctc3lzdGVtLmhlcnVrb2FwcC5jb20iLCJpYXQiOjE1OTQ1ODcwODIsImV4cCI6MTU5NDU5NDI4MiwiYXpwIjoibm02WFRVcjJYOU55ZWZ3cnFsOGg4VGN3N2luR0drZ1giLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImNyZWF0ZTphY3RvciIsImRlbGV0ZTphY3RvciIsImVkaXQ6YWN0b3IiLCJlZGl0Om1vdmllIiwiZ2V0OmFjdG9yLWluZm8iLCJnZXQ6YWN0b3ItbW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZS1hY3RvcnMiLCJnZXQ6bW92aWUtaW5mbyIsImdldDptb3ZpZXMiXX0.OFawqIOPQbWC0JSzmHVsPABcy56OICQmMmFtNEkkD1phLoqrFvQBG_am2UF_CGFKGA54ES4m5pxASxkoBTbZctoxQvXYU2TB1ohLn7u2IV_piHTtJov1WIcf_8dJ-r79xyUMx-_hFfrKs6vL5m_4xrnuic-QOKUdcxuEbIGg3K5A0zFzwtyqyNZK8Aj6nUBTQe0KKpUO6BNB9R9cCJkrTiFmqCAqjKXaFa-XlRpyZ9O53PG-LE6V_uvmSWXcy4Y_Zm3p8T-KXi1GTYsMAQV4qq1N8VLmQ4wKTKJMwMQf5IONojTwR8Rl7heUUbFewyVThmdTDCKqoog5MmyfK-X62g",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik95QUxwckNURjZqY2x3d3JBekFTRSJ9.eyJpc3MiOiJodHRwczovL2tqLWNhc3RpbmctYWdlbmN5LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1ZjBiNzYzZmZkMzBlMjAwMTM2NjYzYjciLCJhdWQiOiJodHRwczovL2tqLWNhc3Rpbmctc3lzdGVtLmhlcnVrb2FwcC5jb20iLCJpYXQiOjE1OTQ3NDUxMzMsImV4cCI6MTU5NDgzMTUzMywiYXpwIjoibm02WFRVcjJYOU55ZWZ3cnFsOGg4VGN3N2luR0drZ1giLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImNyZWF0ZTphY3RvciIsImRlbGV0ZTphY3RvciIsImVkaXQ6YWN0b3IiLCJlZGl0Om1vdmllIiwiZ2V0OmFjdG9yLWluZm8iLCJnZXQ6YWN0b3ItbW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZS1hY3RvcnMiLCJnZXQ6bW92aWUtaW5mbyIsImdldDptb3ZpZXMiXX0.NaDlW_Eg7g_gxcM5QRT8E88-tusvJYNlZrgAcf6voJ5Z4lNx2Ee8S86UZlyqNckY734VtqnMr9GJnBXrtFqbqNCllxOu6rz5OpmLeUAKkIxZoQ7dta0BQ6SYBLhHLyfxqgLd2DofEWhWVnWwyz86xICG33Y5-1rnKzfxf3zwE3tvjgHLNLSHWHMIVhw4TmOpG1CzgO9j39WIl029ax6E4MDeJabvZzjeBG0ZSRzQDRzaUsNs3RfA_-snXFF18FHkjNmQZ5oMxTwIFGUA7Ri9A-F4b28f3TObwUzBB7UhoYN0oJ6f3xKHG44BC4OOm8pnTWD7Jd5x4PC6tz2lHOML2Q",
 						"type": "string"
 					}
 				]
@@ -1795,7 +1795,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\":\"Kane Mary\",\n    \"age\":\"32\",\n    \"gender\":\"Feale\"\n}",
+							"raw": "{\n    \"name\": \"Kane Mary\",\n    \"age\": 33,\n    \"gender\": \"Female\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2377,7 +2377,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik95QUxwckNURjZqY2x3d3JBekFTRSJ9.eyJpc3MiOiJodHRwczovL2tqLWNhc3RpbmctYWdlbmN5LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1ZjBiN2JkMWExNWI3YjAwMTM2MjEyYjkiLCJhdWQiOiJodHRwczovL2tqLWNhc3Rpbmctc3lzdGVtLmhlcnVrb2FwcC5jb20iLCJpYXQiOjE1OTQ1ODgyNzQsImV4cCI6MTU5NDU5NTQ3NCwiYXpwIjoibm02WFRVcjJYOU55ZWZ3cnFsOGg4VGN3N2luR0drZ1giLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImFkZDptb3ZpZS1hY3RvciIsImNyZWF0ZTphY3RvciIsImNyZWF0ZTptb3ZpZSIsImRlbGV0ZTphY3RvciIsImRlbGV0ZTptb3ZpZSIsImRlbGV0ZTptb3ZpZS1hY3RvciIsImVkaXQ6YWN0b3IiLCJlZGl0Om1vdmllIiwiZ2V0OmFjdG9yLWluZm8iLCJnZXQ6YWN0b3ItbW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZS1hY3RvcnMiLCJnZXQ6bW92aWUtaW5mbyIsImdldDptb3ZpZXMiXX0.IAp4aFGgoAms1zl4rvBePrrHi--wsLVjJEy1VXgE29UBhdSBtIqIByOugZHXbCh5ZspKRsHLnBg_qmCG2hhv_H3l1ELlNrgkY2nummnFHoX4sFWrZ1W6nI0uih_judkDXWTiXhhuAH2342dv2HTfx68VV7HjEQqm3pu-a1shxwzyNqTO6KbqZwtfCpb3fddIhtcKz-yVM8cwh0XvvNdgC0Hv8Uv_ondMHmSTJUxvEqiZjxCARJOxOjhOJDosTyEz3a_9EMawqMpnUeMGMPlyRu_wQ6qyeHx8qrB3C10KdtVwdVII3uuqum2td3HR02R9t_3yNpH0StqYFUQHgx_Y2w",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik95QUxwckNURjZqY2x3d3JBekFTRSJ9.eyJpc3MiOiJodHRwczovL2tqLWNhc3RpbmctYWdlbmN5LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1ZjBiN2JkMWExNWI3YjAwMTM2MjEyYjkiLCJhdWQiOiJodHRwczovL2tqLWNhc3Rpbmctc3lzdGVtLmhlcnVrb2FwcC5jb20iLCJpYXQiOjE1OTQ3NDUyMTMsImV4cCI6MTU5NDgzMTYxMywiYXpwIjoibm02WFRVcjJYOU55ZWZ3cnFsOGg4VGN3N2luR0drZ1giLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImFkZDptb3ZpZS1hY3RvciIsImNyZWF0ZTphY3RvciIsImNyZWF0ZTptb3ZpZSIsImRlbGV0ZTphY3RvciIsImRlbGV0ZTptb3ZpZSIsImRlbGV0ZTptb3ZpZS1hY3RvciIsImVkaXQ6YWN0b3IiLCJlZGl0Om1vdmllIiwiZ2V0OmFjdG9yLWluZm8iLCJnZXQ6YWN0b3ItbW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZS1hY3RvcnMiLCJnZXQ6bW92aWUtaW5mbyIsImdldDptb3ZpZXMiXX0.XdNSFjw--teLhOrnF92D37UYQq1uoLJn2ssuCyCB5TrznKNiG_HcTGeM7kF9mFjFIP-QllxIVqx9mFfJWXlalDHyKkBYfJ2p6ifkKuuE9uxAytbFCdlSTGQBimiZ00bNa-5Ea6DWcQAt0SSn-X3l4i3yHuKTVBA-gJjg31Y-X8z6XPD7UULqw0ETHeNbIqaoirdW8nvFA_GmMBK2AdNNxj1Z_LnzavllINdmew1mSvWT3brGZ7tLHjLq4iZXpZt0g_bQQC58V41DB99FvLLbNFGcLboxe692fkC8EPbXtiUu8sfWAzXbae_ceJZ1Loq6RD2gOX9bfgZBeS3dj9gE4A",
 						"type": "string"
 					}
 				]
@@ -2431,7 +2431,7 @@
 	],
 	"variable": [
 		{
-			"id": "6e0e5e6a-46ab-48d6-af49-757e734745c2",
+			"id": "cfbd3f1b-6edd-44f1-a67e-a6e3100c1f3f",
 			"key": "host",
 			"value": "http://localhost:5000"
 		}
