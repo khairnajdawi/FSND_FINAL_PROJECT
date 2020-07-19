@@ -147,8 +147,8 @@ def add_actor(payload):
         'age':form.age.data,
         'gender':form.gender.data
     }
-    get_actors_url = BACKEND_URL + '/actors'
-    api_response = requests.post(get_actors_url, json=json_body, headers=get_headers())
+    actors_url = BACKEND_URL + '/actors'
+    api_response = requests.post(actors_url, json=json_body, headers=get_headers())
     response_json = api_response.json()
     if(response_json['success'] and response_json['inserted']>0):
         flash('Actor created successfully','success')
@@ -284,7 +284,7 @@ def delete_actor_info(payload,actor_id):
         abort(response_json['error'])
     else:
         flash('Could not delete actor!!','danger')
-        return render_template('pages/actors/delete.html',form=form)
+        return render_template('pages/actors/delete.html')
 
 
 @app.route('/movies')
@@ -292,8 +292,112 @@ def delete_actor_info(payload,actor_id):
 @requires_auth('get:movies')
 def movies(payload):
     movies = []
+    get_actors_url = BACKEND_URL + '/movies'
+    api_response = requests.get(get_actors_url,headers=get_headers())
+    response_json = api_response.json()
+    movies = response_json['movies']
     can_add_movie = check_has_permission("create:movie")
-    return render_template('pages/movies/list.html', movies=movies, can_add_movie=can_add_movie)
+    can_get_movie_info = check_has_permission("get:movie-info")
+    can_edit_movie = check_has_permission("edit:movie")
+    can_delete_movie = check_has_permission("delete:movie")
+    return render_template(
+        'pages/movies/list.html',
+        movies=movies,
+        can_add_movie=can_add_movie,
+        can_get_movie_info=can_get_movie_info,
+        can_edit_movie=can_edit_movie,
+        can_delete_movie=can_delete_movie
+        )
+
+
+@app.route('/movies/<int:movie_id>')
+@requires_login
+@requires_auth('get:movie-info')
+def movie_info(payload,movie_id):
+    movie={
+        'title':'',
+        'movie_rating':'',
+        'movie_category':'',
+        'release_date':''
+    }
+    get_movie_url = BACKEND_URL + '/movies/'+str(movie_id)
+    api_response = requests.get(get_movie_url,headers=get_headers())
+    response_json = api_response.json()
+    actors=[]
+    if(response_json['success'] and len(response_json['movie'])>0):
+        movie = response_json['movie']
+        get_actors_url = BACKEND_URL + '/movies/{}/actors'.format(movie_id)
+        api_response = requests.get(get_actors_url,headers=get_headers())
+        response_json = api_response.json()
+        actors = response_json['actors']
+    elif 'error' in response_json:
+        abort(response_json['error'])
+    else:
+        flash('Something went wrong!!','danger')
+    
+    can_add_actor_to_movie = check_has_permission('add:movie-actor')
+    can_delete_movie_actor = check_has_permission('delete:movie-actor')
+
+    return render_template(
+        'pages/movies/info.html',
+        movie=movie,
+        actors=actors,
+        can_add_actor_to_movie=can_add_actor_to_movie,
+        can_delete_movie_actor = can_delete_movie_actor
+        )
+
+
+@app.route('/movies/<int:movie_id>/add-actor')
+@requires_login
+@requires_auth('add:movie-actor')
+def add_movie_actor_form(payload,movie_id):
+    return "add movie actor"
+
+
+
+@app.route('/movies/<int:movie_id>/delete-actor')
+@requires_login
+@requires_auth('delete:movie-actor')
+def delete_movie_actor_form(payload,movie_id):
+    return "delete movie actor"
+
+
+@app.route('/movies/add')
+@requires_login
+@requires_auth('create:movie')
+def add_movie_form(payload):
+    form = MovieForm()
+    return render_template('pages/movies/add.html',form=form)
+
+@app.route('/movies/<int:movie_id>/edit')
+@requires_login
+@requires_auth('edit:movie')
+def edit_movie_form(payload,movie_id):
+    movie={
+        'id':movie_id,
+        'title':'',
+        'movie_rating':'',
+        'movie_category':'',
+        'release_date':''
+    }
+    get_movie_url = BACKEND_URL + '/movies/'+str(movie_id)
+    api_response = requests.get(get_movie_url,headers=get_headers())
+    response_json = api_response.json()
+    if(response_json['success'] and len(response_json['movie'])>0):
+        movie = response_json['movie']
+    elif 'error' in response_json:
+        abort(response_json['error'])
+    else:
+        flash('Something went wrong!!','danger')
+    
+
+    return render_template(
+        'pages/movies/edit.html',
+        movie=movie,
+        actors=actors,
+        can_add_actor_to_movie=can_add_actor_to_movie,
+        can_delete_movie_actor = can_delete_movie_actor
+        )
 
 
 @app.errorhandler(Exception)

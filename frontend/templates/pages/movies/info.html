@@ -8,25 +8,29 @@
 </style>
 <a href="/movies" class="btn btn-outline-dark"><i class="fas fa-arrow-left"></i>&nbsp;back to Movies List</a>
 <div class="box-out">
-    <p><small>Name : </small>{{movie.name}}</p>
-    <p><small>Category : </small>{{movie.movie_category.value}}</p>
-    <p><small>Rating : </small>{{movie.movie_rating.value}}</p>
-    <p><small>Status : </small>{{movie.movie_status.value}}</p>
+    <p><small>title : </small>{{movie.title}}</p>
+    <p><small>Category : </small>{{movie.movie_category}}</p>
+    <p><small>Rating : </small>{{movie.movie_rating}}</p>
+    <p><small>Release Date : </small>{{movie.release_date}}</p>
     <hr>
   <h3>Actors List : </h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Actor's Name</th>
-      </tr>
-    </thead>
-    <tbody>          
-      {%for actor in movie.actors%}
-        <tr>
-          <td>actor.name</td>
-        </tr>
-      {%endfor%}
-    </tbody>
-  </table>
+  <ul>
+    {%for actor in actors%}
+    <li>&nbsp;
+      {% if can_delete_movie_actor %}
+    <a href="#" onclick="delete_movie_actor({{movie.id}},{{actor.id}});">&cross;</a> 
+    {% endif %}
+    {{actor.name}}
+    </li>
+    {%endfor%}
+  </ul>
+  {% if can_add_actor_to_movie %}
+      <a href="/movies/{{movie.id}}/add-actor" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;Add Actor to movie</a>
+  {% endif %}
 </div>
+<script>
+  function delete_movie_actor(movie_id,actor_id){
+    alert(movie_id);
+  }
+</script>
 {% endblock %}

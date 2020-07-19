@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField,  DateTimeField,TextAreaField,TimeField,IntegerField
+from wtforms import StringField, SelectField,  DateField,TextAreaField,TimeField,IntegerField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import DataRequired, AnyOf, URL
 from wtforms.fields import html5 as h5fields
@@ -56,12 +56,8 @@ class AddActorForm(FlaskForm):
     )
 
 class MovieForm(FlaskForm):
-    name = StringField(
-        'name',
-        validators=[DataRequired()]
-    )
-    movie_status = SelectField(
-        'movie_status',
+    title = StringField(
+        'title',
         validators=[DataRequired()]
     )
     movie_rating = SelectField(
@@ -72,10 +68,13 @@ class MovieForm(FlaskForm):
         'movie_category',
         validators=[DataRequired()]
     )
+    release_date = DateField(
+        'release_date',
+        validators=[DataRequired()]
+    )
         
     def __init__(self, *args, **kwargs): 
         super(MovieForm, self).__init__(*args, **kwargs)
-        self.movie_status.choices = [(name, member.value) for name,member in MovieStatus.__members__.items()]
         self.movie_rating.choices = [(name, member.value) for name,member in MoviesRating.__members__.items()]
         self.movie_category.choices = [(name, member.value) for name,member in MoviesCategory.__members__.items()]
 

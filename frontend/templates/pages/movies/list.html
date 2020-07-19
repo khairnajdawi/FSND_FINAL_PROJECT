@@ -9,22 +9,32 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Movie Name</th>
-                <th>Status</th>
+                <th>Movie Title</th>
+                <th>Release Date</th>
+                <th>Category</th>
+                <th>Rating</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             {%for movie in movies %}
             <tr>
-                <td>{{movie.name}}</td>
-                <td>{{movie.movie_status.value}}</td>
+                <td>{{movie.title}}</td>
+                <td>{{movie.release_date}}</td>
+                <td>{{movie.movie_category}}</td>
+                <td>{{movie.movie_rating}}</td>
                 <td>
+                    {%if can_get_movie_info%}
                     <a href="/movies/{{movie.id}}"><i class='fa fa-info'></i></a>
                     &nbsp;
+                    {%endif%}
+                    {%if can_edit_movie%}
                     <a href="/movies/{{movie.id}}/edit"><i class='fa text-warning fa-edit'></i></a>
                     &nbsp;
+                    {%endif%}
+                    {%if can_delete_movie%}
                     <a href="/movies/{{movie.id}}/delete"><i class='fa text-danger fa-trash'></i></a>
+                    {%endif%}
                 </td>
             </tr>
             {% endfor %}
