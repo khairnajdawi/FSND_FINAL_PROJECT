@@ -1,0 +1,8 @@
+export AUTH0_CALLBACK_URL='http://localhost:3000/login-result'
+export AUTH0_CALLBACK_URL_TOKEN='http://localhost:3000/login-result-token'
+export AUTH0_CLIENT_ID='nm6XTUr2X9Nyefwrql8h8Tcw7inGGkgX'
+export AUTH0_CLIENT_SECRET='PKCuDxSCLSoqJ4ew_RSyDy4wwfZkne4hcyYJ5Zz7Cb1ZxrGBpPYXvPMjwqiFLhEf'
+export AUTH0_DOMAIN='kj-casting-agency.us.auth0.com'
+export AUTH0_BASE_URL='https://kj-casting-agency.us.auth0.com'
+export AUTH0_AUDIENCE='https://kj-casting-system.herukoapp.com'
+export BACKEND_URL='http://localhost:5000'

@@ -2,7 +2,9 @@
 {% block title %}Actors{% endblock %}
 {% block content %}
 <h2>Actors</h2>
+{%if can_add_actor %}
 <a href="/actors/add" class="btn btn-success"><i class="fas fa-plus"></i>&nbsp;Add new Actor</a>
+{%endif%}
 <div class="row box-out">
         {%for actor in actors %}
             <div class="col-md-6 col-lg-4 mb-3">
@@ -15,11 +17,17 @@
                     <h2>{{actor.name}}</h2>
                     </div>
                     <div class="card-footer">
+                        {%if can_get_actor_info %}
                         <a href="/actors/{{actor.id}}" title="Actor's Info"><i class='fa fa-info'></i></a>
                         &nbsp;
+                        {%endif%}
+                        {%if can_edit_actor %}
                         <a href="/actors/{{actor.id}}/edit" title="Edit Info"><i class='fa fa-edit text-warning'></i></a>
                         &nbsp;
-                        <a href="/actors/{{actor.id}}/delete" title="Delete Actor"><i class='fa fa-trash text-danger'></i></a>                    
+                        {%endif%}
+                        {%if can_delete_actor %}
+                        <a href="/actors/{{actor.id}}/delete" title="Delete Actor"><i class='fa fa-trash text-danger'></i></a>    
+                        {%endif%}                
                     </div>
                 </div>
             </div>

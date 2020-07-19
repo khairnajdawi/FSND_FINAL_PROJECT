@@ -2,6 +2,7 @@
 """
 from functools import wraps
 import json
+import os
 from os import environ as env
 from werkzeug.exceptions import HTTPException
 
@@ -12,22 +13,20 @@ from flask import redirect
 from flask import render_template
 from flask import session
 from flask import url_for
+from flask import flash
+from flask import abort
 from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
 import http.client
+from auth import AuthError, requires_auth, check_has_permission
+from forms import AddActorForm,MovieForm,MovieActorsForm
+import requests
 import constants
 
 ENV_FILE = find_dotenv()
 if ENV_FILE:
     load_dotenv(ENV_FILE)
 
-AUTH0_CALLBACK_URL = 'http://localhost:3000/login-result'
-AUTH0_CLIENT_ID = 'nm6XTUr2X9Nyefwrql8h8Tcw7inGGkgX'
-AUTH0_CLIENT_SECRET =\
-    'PKCuDxSCLSoqJ4ew_RSyDy4wwfZkne4hcyYJ5Zz7Cb1ZxrGBpPYXvPMjwqiFLhEf'
-AUTH0_DOMAIN = 'kj-casting-agency.us.auth0.com'
-AUTH0_BASE_URL = 'https://' + AUTH0_DOMAIN
-AUTH0_AUDIENCE = 'https://kj-casting-system.herukoapp.com'
 
 app = Flask(__name__, static_url_path='/static', static_folder='./static')
 app.secret_key = constants.SECRET_KEY
@@ -37,21 +36,20 @@ oauth = OAuth(app)
 
 auth0 = oauth.register(
     'auth0',
-    client_id=AUTH0_CLIENT_ID,
-    client_secret=AUTH0_CLIENT_SECRET,
-    api_base_url=AUTH0_BASE_URL,
-    access_token_url=AUTH0_BASE_URL + '/oauth/token',
-    authorize_url=AUTH0_BASE_URL + '/authorize',
+    client_id=os.environ['AUTH0_CLIENT_ID'],
+    client_secret=os.environ['AUTH0_CLIENT_SECRET'],
+    api_base_url=os.environ['AUTH0_BASE_URL'],
+    access_token_url=os.environ['AUTH0_BASE_URL'] + '/oauth/token',
+    authorize_url=os.environ['AUTH0_BASE_URL'] + '/authorize',
     client_kwargs={
-        'scope': 'openid profile email',
+        'scope': 'openid profile email token',
     },
 )
-
-
-def requires_auth(f):
+BACKEND_URL=os.environ['BACKEND_URL']
+def requires_login(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if constants.PROFILE_KEY not in session:
+        if constants.JWT_PAYLOAD not in session:
             return redirect('/login')
         return f(*args, **kwargs)
 
@@ -66,36 +64,19 @@ def home():
 
 @app.route('/login-result')
 def callback_handling():
-    auth0.authorize_access_token()
-    resp = auth0.get('userinfo')
-    userinfo = resp.json()
-
-    session[constants.JWT_PAYLOAD] = userinfo
-    session[constants.PROFILE_KEY] = {
-        'user_id': userinfo['sub'],
-        'name': userinfo['name'],
-        'picture': userinfo['picture']
-    }
-    # get access token
-    # print(code)
-    # conn = http.client.HTTPSConnection("")
-    # payload = "grant_type=authorization_code&client_id=${account.clientId}&
-    # client_secret={AUTH0_CLIENT_SECRET}&code={code}&redirect_uri=${account.callback}"
-    # headers = { 'content-type': "application/x-www-form-urlencoded" }
-    # conn.request("POST", "/{AUTH0_DOMAIN}/oauth/token", payload, headers)
-    # res = conn.getresponse()
-    # data = res.read()
-
-    # print(data.decode("utf-8"))
-
-    return redirect('/movies')
+    auth_response = auth0.authorize_access_token()
+    access_token = auth_response.get("access_token")
+    print(access_token)
+    session[constants.JWT_PAYLOAD] = access_token
+    
+    return redirect(url_for('movies'))
 
 
 @app.route('/login')
 def login():
     return auth0.authorize_redirect(
-        redirect_uri=AUTH0_CALLBACK_URL,
-        audience=AUTH0_AUDIENCE
+        redirect_uri=os.environ['AUTH0_CALLBACK_URL']
+,        audience=os.environ['AUTH0_AUDIENCE']
         )
 
 
@@ -104,35 +85,215 @@ def logout():
     session.clear()
     params = {
         'returnTo': url_for('home', _external=True),
-        'client_id': AUTH0_CLIENT_ID
+        'client_id': os.environ['AUTH0_CLIENT_ID']
         }
     return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
 
-@app.route('/dashboard')
-@requires_auth
-def dashboard():
-    return render_template(
-        'pages/dashboard.html',
-        userinfo=session[constants.PROFILE_KEY],
-        userinfo_pretty=json.dumps(
-            session[constants.JWT_PAYLOAD],
-            indent=4
-            )
-        )
+# @app.route('/dashboard')
+# @requires_login
+# def dashboard():
+#     return render_template(
+#         'pages/dashboard.html',
+#         userinfo=session[constants.PROFILE_KEY],
+#         userinfo_pretty=json.dumps(
+#             session[constants.JWT_PAYLOAD],
+#             indent=4
+#             )
+#         )
 
+# helper to prepare headers for backend api call
+def get_headers():
+    return {'Content-Type': 'application/json', 'Authorization': "Bearer %s"%session[constants.JWT_PAYLOAD]}
 
 @app.route('/actors')
-@requires_auth
-def actors():
+@requires_login
+@requires_auth('get:actors')
+def actors(payload):
     actors = []
-    return render_template('pages/actors/list.html', actors=actors)
+    can_add_actor = check_has_permission("create:actor")
+    can_edit_actor = check_has_permission("edit:actor")
+    can_delete_actor = check_has_permission("delete:actor")
+    can_get_actor_info = check_has_permission("get:actor-info")
+    get_actors_url = BACKEND_URL + '/actors'
+    api_response = requests.get(get_actors_url,headers=get_headers())
+    response_json = api_response.json()
+    actors = response_json['actors']
+    return render_template(
+        'pages/actors/list.html',
+        actors=actors,
+        can_add_actor=can_add_actor,
+        can_edit_actor=can_edit_actor,
+        can_delete_actor=can_delete_actor,
+        can_get_actor_info=can_get_actor_info)
+
+
+
+@app.route('/actors/add')
+@requires_login
+@requires_auth('create:actor')
+def add_actor_form(payload):
+    form = AddActorForm()
+    return render_template('pages/actors/add.html',form=form)
+
+
+@app.route('/actors/add', methods=['POST'])
+@requires_login
+@requires_auth('create:actor')
+def add_actor(payload):
+    form = AddActorForm(request.form)
+    json_body =  {
+        'name':form.name.data,
+        'age':form.age.data,
+        'gender':form.gender.data
+    }
+    get_actors_url = BACKEND_URL + '/actors'
+    api_response = requests.post(get_actors_url, json=json_body, headers=get_headers())
+    response_json = api_response.json()
+    if(response_json['success'] and response_json['inserted']>0):
+        flash('Actor created successfully','success')
+        return redirect(url_for("actors"))
+    else:
+        flash('Could not add actor!!','danger')
+        return render_template('pages/actors/add.html',form=form)
+
+
+@app.route('/actors/<int:actor_id>')
+@requires_login
+@requires_auth('get:actor-info')
+def get_actor_info(payload,actor_id):
+    get_actors_url = BACKEND_URL + '/actors/'+ str(actor_id)
+    api_response = requests.get(get_actors_url, headers=get_headers())
+    response_json = api_response.json()
+    print(response_json)
+    actor = {
+        'name':'',
+        'age':'',
+        'gender':''
+    }
+    movies=[]
+    if(response_json['success'] and len(response_json['info'])>0):
+        actor = response_json['info']
+        get_actor_movies_url = BACKEND_URL + '/actors/'+ str(actor_id) + "/movies"
+        movies_response = requests.get(get_actor_movies_url, headers=get_headers())
+        movies_response_json = movies_response.json()
+        if(response_json['success'] and len(movies_response_json['movies'])>0):
+            movies = movies_response_json['movies']
+            print(movies)
+    elif 'error' in response_json:
+        abort(response_json['error'])
+    else:
+        flash('Something went wrong!!','danger')
+    
+    return render_template('pages/actors/info.html',actor=actor,movies=movies)
+
+
+
+@app.route('/actors/<int:actor_id>/edit')
+@requires_login
+@requires_auth('edit:actor')
+def edit_actor_info_form(payload,actor_id):
+    form=AddActorForm()
+    get_actors_url = BACKEND_URL + '/actors/'+ str(actor_id)
+    api_response = requests.get(get_actors_url, headers=get_headers())
+    response_json = api_response.json()
+    print(response_json)
+    actor = {
+        'name':'',
+        'age':'',
+        'gender':''
+    }
+    if(response_json['success'] and len(response_json['info'])>0):
+        actor = response_json['info']
+        form.age.data = actor['age']
+        form.name.data = actor['name']
+        form.gender.data = actor['gender']
+    elif 'error' in response_json:
+        abort(response_json['error'])
+    else:
+        flash('Something went wrong!!','danger')
+    
+    return render_template('pages/actors/edit.html',form=form)
+
+
+
+@app.route('/actors/<int:actor_id>/edit', methods=['POST'])
+@requires_login
+@requires_auth('edit:actor')
+def edit_actor_info(payload,actor_id):
+    form=AddActorForm(request.form)
+    get_actors_url = BACKEND_URL + '/actors/'+ str(actor_id)
+    json_data = {
+        'name':form.name.data,
+        'age':form.age.data,
+        'gender':form.gender.data
+    }
+    api_response = requests.patch(get_actors_url, headers=get_headers(),json = json_data)
+    response_json = api_response.json()
+    print(response_json)
+    response_json = api_response.json()
+    if(response_json['success'] and response_json['updated']>0):
+        flash('Actor updated successfully','success')
+        return redirect(url_for("actors"))
+    elif 'error' in response_json:
+        abort(response_json['error'])
+    else:
+        flash('Could not update actor\'s info !!','danger')
+        return render_template('pages/actors/edit.html',form=form)
+
+
+@app.route('/actors/<int:actor_id>/delete')
+@requires_login
+@requires_auth('delete:actor')
+def delete_actor_info_form(payload,actor_id):
+    get_actors_url = BACKEND_URL + '/actors/'+ str(actor_id)
+    api_response = requests.get(get_actors_url, headers=get_headers())
+    response_json = api_response.json()
+    print(response_json)
+    actor = {
+        'name':'',
+        'age':'',
+        'gender':''
+    }
+    if(response_json['success'] and len(response_json['info'])>0):
+        actor = response_json['info']
+    elif 'error' in response_json:
+        abort(response_json['error'])
+    else:
+        flash('Something went wrong!!','danger')
+    
+    return render_template('pages/actors/delete.html',actor=actor)
+
+
+@app.route('/actors/<int:actor_id>/delete', methods=['POST'])
+@requires_login
+@requires_auth('delete:actor')
+def delete_actor_info(payload,actor_id):
+    get_actors_url = BACKEND_URL + '/actors/'+ str(actor_id)
+    json_data = {
+        'actor_id':actor_id
+    }
+    api_response = requests.delete(get_actors_url, headers=get_headers(),json = json_data)
+    response_json = api_response.json()
+    print(response_json)
+    response_json = api_response.json()
+    if(response_json['success'] and response_json['deleted']==actor_id):
+        flash('Actor deleted successfully','success')
+        return redirect(url_for("actors"))
+    elif 'error' in response_json:
+        abort(response_json['error'])
+    else:
+        flash('Could not delete actor!!','danger')
+        return render_template('pages/actors/delete.html',form=form)
 
 
 @app.route('/movies')
-def movies():
+@requires_login
+@requires_auth('get:movies')
+def movies(payload):
     movies = []
-    return render_template('pages/movies/list.html', movies=movies)
+    can_add_movie = check_has_permission("create:movie")
+    return render_template('pages/movies/list.html', movies=movies, can_add_movie=can_add_movie)
 
 
 @app.errorhandler(Exception)
@@ -140,6 +301,16 @@ def handle_auth_error(ex):
     response = jsonify(message=str(ex))
     response.status_code = (ex.code if isinstance(ex, HTTPException) else 500)
     return response
+
+
+# error handling for AuthError
+@app.errorhandler(AuthError)
+def auth_error_handler(auth_error):
+    return render_template('pages/errors/autherror.html', auth_error=auth_error)
+
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('pages/errors/not_found.html')
 
 
 if __name__ == "__main__":

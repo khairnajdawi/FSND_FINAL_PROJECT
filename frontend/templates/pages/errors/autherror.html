@@ -1,0 +1,12 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Casting Agency System{% endblock %}
+{% block content %}
+<div class="row">
+<div class="container-fluid jumbotron box-out" style="background:darkred; color:wheat;">
+    <h1 class="display-4">Oops</h1>
+    <hr class="my-4">
+    <p class="lead">{{auth_error.error.code}}</p>
+    <p class="lead">{{auth_error.error.description}}</p>
+  </div>
+</div>
+{% endblock %}

@@ -3,20 +3,46 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField,  DateTimeField,TextAreaField,TimeField,IntegerField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import DataRequired, AnyOf, URL
-from models import MoviesCategory,MoviesRating,MovieStatus
 from wtforms.fields import html5 as h5fields
 from wtforms.widgets import html5 as h5widgets
+import enum
 
+
+'''
+Movies Category Enum
+'''
+
+
+class MoviesCategory(enum.Enum):
+    Comedy = 'Comedy'
+    Action = 'Action'
+    Drama = 'Drama'
+    Romance = 'Romance'
+    Animation = 'Animation'
+    History = 'History'
+    Crime = 'Crime'
+    SciFi = 'SciFi'
+    Horror = 'Horror'
+    Family = 'Family'
+    Adventure = 'Adventure'
+    Musical = 'Musical'
+    Documentary = 'Documentary'
+
+'''
+Movies Rating Enum
+'''
+
+
+class MoviesRating(enum.Enum):
+    G = 'G'
+    PG = 'PG'
+    PG13 = 'PG-13'
+    R = 'R'
 
 class AddActorForm(FlaskForm):
     name = StringField(
         'name',
         validators=[DataRequired()]
-    )
-    is_available = SelectField(
-        'is_available',
-        validators=[DataRequired()],
-        choices=[('True','Yes'),('False','No')]
     )
     age = h5fields.IntegerField(
         'age',
