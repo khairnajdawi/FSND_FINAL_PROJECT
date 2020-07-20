@@ -369,10 +369,41 @@ def add_movie_form(payload):
     form = MovieForm()
     return render_template('pages/movies/add.html',form=form)
 
+
+@app.route('/movies/add', methods=['POST'])
+@requires_login
+@requires_auth('create:movie')
+def add_new_movie(payload):
+    form = MovieForm(request.form)
+    new_movie = {
+        'title': form.title.data,
+        'movie_category': form.movie_category.data,
+        'movie_rating': form.movie_rating.data,
+        'release_date': str(form.release_date.data)
+    }
+    create_movie_url = BACKEND_URL + '/movies'
+    api_response = requests.post(
+        create_movie_url,
+        headers = get_headers(),
+        json = new_movie
+    )
+    response_json = api_response.json()
+    print(response_json);
+    if(response_json['success'] and response_json['new_movie_id']>0):
+        flash('Movie created successfully!','success')
+        return redirect(url_for('movies'))
+    elif 'error' in response_json:
+        abort(response_json['error'])
+    else:
+        flash('Something went wrong!!','danger')
+    return render_template('pages/movies/add.html',form=form)
+
+
 @app.route('/movies/<int:movie_id>/edit')
 @requires_login
 @requires_auth('edit:movie')
 def edit_movie_form(payload,movie_id):
+    form = MovieForm()
     movie={
         'id':movie_id,
         'title':'',
@@ -385,6 +416,10 @@ def edit_movie_form(payload,movie_id):
     response_json = api_response.json()
     if(response_json['success'] and len(response_json['movie'])>0):
         movie = response_json['movie']
+        form.title.data = movie['title']
+        form.movie_rating.data = movie['movie_rating']
+        form.movie_category.data = movie['movie_category']
+        form.release_date.data = movie['release_date']
     elif 'error' in response_json:
         abort(response_json['error'])
     else:
@@ -394,14 +429,12 @@ def edit_movie_form(payload,movie_id):
     return render_template(
         'pages/movies/edit.html',
         movie=movie,
-        actors=actors,
-        can_add_actor_to_movie=can_add_actor_to_movie,
-        can_delete_movie_actor = can_delete_movie_actor
+        form = form
         )
 
 
 @app.errorhandler(Exception)
-def handle_auth_error(ex):
+def handle_debug_error(ex):
     response = jsonify(message=str(ex))
     response.status_code = (ex.code if isinstance(ex, HTTPException) else 500)
     return response

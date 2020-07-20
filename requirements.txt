@@ -1,4 +1,5 @@
 Flask
+Flask-wtf
 Flask-Cors==3.0.8
 Flask-Migrate==2.5.3
 Flask-RESTful==0.3.7

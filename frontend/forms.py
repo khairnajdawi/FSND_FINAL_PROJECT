@@ -1,10 +1,12 @@
 from datetime import datetime
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField,  DateField,TextAreaField,TimeField,IntegerField
+from wtforms import StringField, SelectField,TextAreaField,TimeField,IntegerField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import DataRequired, AnyOf, URL
 from wtforms.fields import html5 as h5fields
 from wtforms.widgets import html5 as h5widgets
+from wtforms.fields.html5 import DateField
+
 import enum
 
 
@@ -70,6 +72,7 @@ class MovieForm(FlaskForm):
     )
     release_date = DateField(
         'release_date',
+        format='%Y-%m-%d',
         validators=[DataRequired()]
     )
         
