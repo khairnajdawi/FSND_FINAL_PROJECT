@@ -53,7 +53,7 @@ CREATE TABLE public."MovieActors" (
 CREATE TABLE public."Movies" (
     id integer NOT NULL,
     title character varying NOT NULL,
-    release_date timestamp without time zone NOT NULL,
+    release_date date NOT NULL,
     movie_category public.moviescategory NOT NULL,
     movie_rating public.moviesrating NOT NULL
 );

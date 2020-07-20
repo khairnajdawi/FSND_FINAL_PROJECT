@@ -20,7 +20,7 @@
             {%for movie in movies %}
             <tr>
                 <td>{{movie.title}}</td>
-                <td>{{movie.release_date}}</td>
+                <td>{{movie.release_date|datetime('small')}}</td>
                 <td>{{movie.movie_category}}</td>
                 <td>{{movie.movie_rating}}</td>
                 <td>

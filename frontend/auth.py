@@ -4,10 +4,9 @@ from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
 import constants
+import os
 
-AUTH0_DOMAIN = 'kj-casting-agency.us.auth0.com'
 ALGORITHMS = ['RS256']
-API_AUDIENCE = 'https://kj-casting-system.herukoapp.com'
 
 
 # AuthError Exception
@@ -50,7 +49,7 @@ def check_permissions(permission, payload):
 # verify the provided jwt is valid
 def verify_decode_jwt(token):
     # GET THE PUBLIC KEY FROM AUTH0
-    jsonurl = urlopen('https://{}/.well-known/jwks.json'.format(AUTH0_DOMAIN))
+    jsonurl = urlopen('https://{}/.well-known/jwks.json'.format(os.environ['AUTH0_DOMAIN']))
     jwks = json.loads(jsonurl.read())
     # GET THE DATA IN THE HEADER
     unverified_header = jwt.get_unverified_header(token)
@@ -78,8 +77,8 @@ def verify_decode_jwt(token):
                 token,
                 rsa_key,
                 algorithms=ALGORITHMS,
-                audience=API_AUDIENCE,
-                issuer='https://' + AUTH0_DOMAIN + '/'
+                audience=os.environ['AUTH0_AUDIENCE'],
+                issuer='https://' + os.environ['AUTH0_DOMAIN'] + '/'
             )
             return payload
         # catch exception for expired signature error

@@ -15,17 +15,21 @@
     <hr>
   <h3>Actors List : </h3>
   <ul>
-    {%for actor in actors%}
+    {%for actor in movie_actors%}
     <li>&nbsp;
-      {% if can_delete_movie_actor %}
-    <a href="/movies/{{movie.id}}/deleteactor/{{actor.id}}">&cross;</a> 
-    {% endif %}
     {{actor.name}}
     </li>
     {%endfor%}
   </ul>
-  {% if can_add_actor_to_movie %}
-      <a href="/movies/{{movie.id}}/addactor" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;Add Actor to movie</a>
-  {% endif %}
+  <hr>
+    <h3 class="form-heading">Add actor to movie</h3>
+  <form method="POST" class="form col-md-8 col-lg-6 justify-content-center">
+    <div class="form-group">
+      <label for="actor">Select actor</label>
+      {{ form.actor(class_ = 'form-control', autofocus = true) }}
+    </div>
+    <input type="submit" value="Add Actor" class="btn btn-primary btn-lg btn-block">
+  </form>
 </div>
+
 {% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Movie Info{% endblock %}
+{% block content %}
+<style>
+  p{
+    font-size:x-large;
+  }
+</style>
+<a href="/movies/{{movie.id}}/actors" class="btn btn-outline-dark"><i class="fas fa-arrow-left"></i>&nbsp;back to Movie's Actors List</a>
+<div class="box-out">
+    <p><small>Movie : </small>{{movie.title}}</p>
+    <hr>
+  <h3><small>Actor : </small>{{actor.name}}</h3>
+  <h4 class="form-heading">Are you sure you want to remove this actor from the movie ?</h4>
+  <hr>
+  <form method="POST" class="form col-md-8 col-lg-6 justify-content-center">
+      <div class="btn-group" role="group" aria-label="Basic example">
+          <button type="submit" name="deleteButton" class="btn btn-danger btn-lg">Yes</button>
+          <a href="/movies/{{movie.id}}/actors" name="cancelButton" class="btn btn-outline-dark btn-lg">No</a>
+      </div>
+  </form>
+</div>
+
+{% endblock %}

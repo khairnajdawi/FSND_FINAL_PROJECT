@@ -524,7 +524,7 @@ def create_app():
         # return json response with success result and movie's id just deleted
         return jsonify({
             'success': deleted,
-            'movie': movie_id
+            'deleted': movie_id
         })
 
     # Errors Handlers

@@ -83,7 +83,7 @@ class MovieForm(FlaskForm):
 
 
 class MovieActorsForm(FlaskForm):
-    Actor = SelectField(
-        'Actor',
+    actor = SelectField(
+        'actor',
         validators=[DataRequired()]
     )
