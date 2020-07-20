@@ -32,16 +32,16 @@ This will install all of the required packages we selected within the `requireme
 
 ## Running the server
 
-From within the `./src` directory first ensure you are working using your created virtual environment.
+From within the root directory first ensure you are working using your created virtual environment.
 
 Each time you open a new terminal session, run:
 ```bash
-source ./setup.py;
+source ./backend/setup.py;
 ```
 so you get the environment variables needed
 
 ```bash
-export FLASK_APP=flaskr;
+export FLASK_APP=backend.flaskr;
 ```
 
 To run the server, execute:
