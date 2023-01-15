@@ -293,7 +293,7 @@ Test your endpoints with [Postman](https://getpostman.com):
         ```
 
 
-- GET '/actors/&lt;movie_id&gt;'
+- GET '/movies/&lt;movie_id&gt;'
     - get a specific movie's info
     - Request Arguments : None
     - Returns : A boolean success, and a json object representing movie's info
